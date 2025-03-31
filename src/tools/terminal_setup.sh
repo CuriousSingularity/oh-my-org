@@ -4,7 +4,27 @@
 sudo_tasks() {
     # Update and install essential tools
     sudo apt update && sudo apt upgrade -y
-    sudo apt install -y git tmux vim ssh speedtest-cli htop cpufrequtils lm-sensors fontconfig zsh powerline fonts-powerline unzip fd-find
+    sudo apt install -y \
+        git \
+        tmux \
+        vim \
+        ssh \
+        speedtest-cli \
+        htop \
+        cpufrequtils \
+        lm-sensors \
+        fontconfig \
+        zsh \
+        powerline \
+        fonts-powerline \
+        unzip \
+        fd-find \
+        net-tools \
+        tree \
+        curl \
+        wget \
+        neofetch \
+        nvtop
 
     # Load and configure kernel modules
     sudo modprobe drivetemp
