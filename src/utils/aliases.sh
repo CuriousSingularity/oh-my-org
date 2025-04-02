@@ -18,9 +18,9 @@ alias fzf="fzf -x --multi --cycle --reverse"
 # Caution: Shortcut for forceful removal of files/directories
 alias rmf="rm -rf"
 
-# Docker: Shortcuts for managing Docker containers and images
-alias dockerps="docker ps -a"
-alias dockerrmidangling="docker rmi $(docker images -f "dangling=true" -q)"
-alias dockerrm="docker rm $(docker ps -a -q)"
-alias dockerrun="docker run -it --rm"
-alias dockerrmimage="docker rmi $(docker images -q)"
+# # Docker: Shortcuts for managing Docker containers and images
+# alias dockerps="docker ps -a"
+# alias dockerrmidangling="docker rmi $(docker images -f "dangling=true" -q)"
+# alias dockerrm="docker rm $(docker ps -a -q)"
+# alias dockerrun="docker run -it --rm"
+# alias dockerrmimage="docker rmi $(docker images -q)"
