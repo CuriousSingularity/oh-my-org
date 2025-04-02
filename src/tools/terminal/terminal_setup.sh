@@ -85,6 +85,10 @@ source ~/.oh-my-zsh/custom/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
 source ~/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 END
 
+    # Configure p10k
+    echo -e "[ -f ~/.p10k.zsh ] && source ~/.p10k.zsh" >> ~/.zshrc
+    cp "$(dirname "$0")/.p10k.zsh $HOME/
+
     # Install fzf
     git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
     ~/.fzf/install --all
