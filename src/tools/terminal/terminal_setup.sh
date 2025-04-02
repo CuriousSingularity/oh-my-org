@@ -87,7 +87,7 @@ END
 
     # Configure p10k
     echo -e "[ -f ~/.p10k.zsh ] && source ~/.p10k.zsh" >> ~/.zshrc
-    cp "$(dirname "$0")/.p10k.zsh $HOME/
+    cp $(dirname "$0")/.p10k.zsh $HOME/
 
     # Install fzf
     git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
@@ -107,6 +107,8 @@ set mouse=a            " Enable mouse usage (all modes)
 set number             " Show line numbers
 set hlsearch           " Highlight search results
 END
+
+    echo -e "source $HOME/oh-my-org/src/main.sh" >> ~/.zshrc
 }
 
 # Main script execution
