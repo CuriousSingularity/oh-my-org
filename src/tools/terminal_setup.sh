@@ -32,6 +32,9 @@ sudo_tasks() {
 
     # Install lsd and uv
     sudo snap install lsd
+
+    # Set Zsh as default shell
+    echo -e "[ -f /usr/bin/zsh ] && exec /usr/bin/zsh" >> ~/.bashrc
 }
 
 non_sudo_tasks() {
@@ -49,6 +52,9 @@ non_sudo_tasks() {
     find "$FONT_DIR" -name "*Windows*" -delete
     fc-cache -fv
 
+    # Install zsh
+    bash "$(dirname "$0")/install_zsh.sh"
+
     # Install and configure Oh My Zsh
     rm -rf ~/.oh-my-zsh
     git clone https://github.com/ohmyzsh/ohmyzsh.git ~/.oh-my-zsh
@@ -59,23 +65,24 @@ non_sudo_tasks() {
     cp ~/.oh-my-zsh/templates/zshrc.zsh-template ~/.zshrc
     sed -i '0,/ZSH_THEME/{/ZSH_THEME/d}' ~/.zshrc
 
-    cat << 'END' >> ~/.zshrc
-    # custom
-    ZSH_THEME="powerlevel10k/powerlevel10k"
-    POWERLEVEL9K_DISABLE_RPROMPT=true
-    POWERLEVEL9K_PROMPT_ON_NEWLINE=true
-    POWERLEVEL9K_MULTILINE_LAST_PROMPT_PREFIX="▶ "
-    POWERLEVEL9K_MULTILINE_FIRST_PROMPT_PREFIX=""
-    source ~/.oh-my-zsh/custom/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
-    source ~/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+    cat ~/.zshrc > .tmp
+    rm ~/.zshrc
+
+tee -a ~/.zshrc << END
+# custom
+ZSH_THEME="powerlevel10k/powerlevel10k"
+POWERLEVEL9K_DISABLE_RPROMPT=true
+POWERLEVEL9K_PROMPT_ON_NEWLINE=true
+POWERLEVEL9K_MULTILINE_LAST_PROMPT_PREFIX="▶ "
+POWERLEVEL9K_MULTILINE_FIRST_PROMPT_PREFIX=""
 END
 
-    # Set Zsh as default shell
-    cat << 'END' >> ~/.bashrc
-    if [ "$SHELL" != "/usr/bin/zsh" ]; then
-        export SHELL="/usr/bin/zsh"
-        exec /usr/bin/zsh
-    fi
+    cat .tmp >> ~/.zshrc
+    rm .tmp
+
+tee -a ~/.zshrc << END
+source ~/.oh-my-zsh/custom/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
+source ~/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 END
 
     # Install fzf
@@ -83,17 +90,18 @@ END
     ~/.fzf/install --all
 
     # Configure Vim
-    cat << 'END' > ~/.vimrc
-    " Vim configuration
-    set showmatch          " Show matching brackets.
-    set ignorecase         " Do case insensitive matching
-    set smartcase          " Do smart case matching
-    set incsearch          " Incremental search
-    set autowrite          " Automatically save before commands like :next and :make
-    set hidden             " Hide buffers when they are abandoned
-    set mouse=a            " Enable mouse usage (all modes)
-    set number             " Show line numbers
-    set hlsearch           " Highlight search results
+rm ~/.vimrc
+tee -a ~/.vimrc << END
+"set showcmd            " Show (partial) command in status line.
+set showmatch          " Show matching brackets.
+set ignorecase         " Do case insensitive matching
+set smartcase          " Do smart case matching
+set incsearch          " Incremental search
+set autowrite          " Automatically save before commands like :next and :make
+set hidden             " Hide buffers when they are abandoned
+set mouse=a            " Enable mouse usage (all modes)
+set number             " Show line numbers
+set hlsearch           " Highlight search results
 END
 }
 
