@@ -15,16 +15,13 @@ for REPO in "${REPOS[@]}"; do
         mkdir -p "$INSTALL_DIR"
     fi
 
-    # Clone the repository into the installation directory
-    if [ ! -d "$INSTALL_DIR/.git" ]; then
-        # Clone the repository if it doesn't already exist
-        git clone "$REPO_URL" "$INSTALL_DIR"
-    else
-        # Pull the latest changes if the repository already exists
-        echo "Repository already exists in $INSTALL_DIR. Pulling latest changes..."
-        cd "$INSTALL_DIR" && git pull
-        cd - > /dev/null  # Return to the original directory
+    # Skip cloning if the directory already exists
+    if [ -d "$INSTALL_DIR/.git" ]; then
+        continue
     fi
+
+    # Clone the repository if it doesn't already exist
+    git clone "$REPO_URL" "$INSTALL_DIR"
 
     # Determine the appropriate shell configuration file
     if [[ "$SHELL" == *"zsh" ]]; then
