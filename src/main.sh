@@ -14,6 +14,7 @@ check_for_updates() {
         if [ "$LOCAL" != "$REMOTE" ]; then
             echo "Updating oh-my-org..."
             git pull origin main
+            clear
         else
             echo "oh-my-org is up to date."
         fi
