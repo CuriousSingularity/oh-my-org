@@ -111,7 +111,6 @@ set number             " Show line numbers
 set hlsearch           " Highlight search results
 END
 
-    echo -e "source $HOME/oh-my-org/src/main.sh" >> ~/.zshrc
 }
 
 # Main script execution
