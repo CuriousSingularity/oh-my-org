@@ -119,5 +119,4 @@ if [ "$EUID" -ne 0 ]; then
 else
     echo "Running sudo tasks..."
     sudo_tasks
-    non_sudo_tasks
 fi
