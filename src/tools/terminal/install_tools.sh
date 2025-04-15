@@ -53,7 +53,10 @@ non_sudo_tasks() {
     fc-cache -fv
 
     # Install zsh
-    bash "$(dirname "$0")/install_zsh.sh"
+    if [ ! -f "/usr/bin/zsh" ]; then
+        echo "Zsh not found. Installing Zsh..."
+        bash "$(dirname "$0")/install_zsh.sh"
+    fi
 
     # Install and configure Oh My Zsh
     rm -rf ~/.oh-my-zsh
