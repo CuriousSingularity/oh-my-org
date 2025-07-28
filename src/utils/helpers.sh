@@ -58,3 +58,19 @@ run() {
         echo "Command $command $((i + 1)) completed."
     done
 }
+
+# Swap the names of two files or directories
+swap() {
+    local file1=$1
+    local file2=$2
+
+    if [ -e "$file1" ] && [ -e "$file2" ]; then
+        local temp_name="${file1}_temp_swap"
+        mv "$file1" "$temp_name" &&
+        mv "$file2" "$file1" &&
+        mv "$temp_name" "$file2" &&
+        echo "Swapped $file1 and $file2 successfully."
+    else
+        echo "Error: One or both files/directories do not exist."
+    fi
+}
