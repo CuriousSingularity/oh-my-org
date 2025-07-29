@@ -36,3 +36,9 @@ uvr() {
     fi
     rm -rf "$venv_dir"
 }
+
+# Activate the virtual environment
+uva() {
+    local venv_dir=${1:-.venv}
+    source "$venv_dir/bin/activate"
+}
