@@ -33,3 +33,7 @@ for script in "$REPO_DIR"/src/utils/*.sh; do
         source "$script"
     fi
 done
+
+# Run the weather widget with default parameters
+bash $REPO_DIR/src/tools/widgets/weather.sh Bengaluru 1
+bash $REPO_DIR/src/tools/widgets/weather.sh Traunreut 1
