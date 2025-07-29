@@ -1,3 +1,5 @@
+alias reload="exec $SHELL -l"
+
 # Visualize: Shortcuts for listing files and directories
 alias lsa="ls -ah"
 
