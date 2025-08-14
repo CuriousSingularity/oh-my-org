@@ -16,4 +16,9 @@
 city=${1:-bangalore}
 level=${2:-1}
 parameters=${3:-""}
-curl "wttr.in/$city?$level$parameters"
+for i in {1..3}; do
+  if curl -m 1 "wttr.in/$city?$level$parameters"; then
+    exit 0
+  fi
+done
+exit 1

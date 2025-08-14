@@ -16,6 +16,7 @@ alias gits="git status"
 # Search: Shortcut for fuzzy finding
 alias fd="fdfind"
 alias fzf="fzf -x --multi --cycle --reverse"
+alias grp="grep --color=auto -Rni"
 
 # Caution: Shortcut for forceful removal of files/directories
 alias rmf="rm -rf"

@@ -42,3 +42,10 @@ uva() {
     local venv_dir=${1:-.venv}
     source "$venv_dir/bin/activate"
 }
+
+# Deactivate the current virtual environment
+uvd() {
+    if [[ -n "$VIRTUAL_ENV" ]]; then
+        deactivate
+    fi
+}
