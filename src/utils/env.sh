@@ -1,3 +1,5 @@
+#!/usr/bin/env bash
+
 DEFAULT_PYTHON_VERSION=3.8
 
 # Create and activate a Python virtual environment with a specified version (default is 3.8)

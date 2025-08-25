@@ -1,9 +1,12 @@
+#!/usr/bin/env bash
+
+# Shell management
 alias reload="exec $SHELL -l"
 
-# Visualize: Shortcuts for listing files and directories
+# File listing shortcuts
 alias lsa="ls -ah"
 
-# Git: Shortcuts for common Git operations
+# Git shortcuts
 alias gita="git add ."
 alias gitb="git branch"
 alias gitc="git commit -m"
@@ -14,19 +17,20 @@ alias gitp="git pull"
 alias gits="git status"
 alias gitr="git remote -v"
 
-# Search: Shortcut for fuzzy finding
+# Search tools
 alias fd="fdfind"
 alias fzf="fzf -x --multi --cycle --reverse"
 alias grp="grep --color=auto -Rni"
 
-# Caution: Shortcut for forceful removal of files/directories
+# File operations (use with caution)
 alias rmf="rm -rf"
 
-# Docker: Shortcuts for managing Docker containers and images
+# Docker shortcuts
 alias dps="docker ps -a"
 alias drm="docker rm \$(docker ps -a -q)"
 alias drmi="docker rmi \$(docker images -f 'dangling=true' -q)"
 alias drun="docker run -it --rm"
 alias drmall="docker rmi \$(docker images -q)"
 
-alias wttr="bash $HOME/.oh-my-org/src/tools/widgets/weather.sh"
+# Weather widget
+alias wttr="bash \$HOME/.oh-my-org/src/tools/widgets/weather.sh"
