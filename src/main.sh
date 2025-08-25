@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 # Path to the repository
 REPO_DIR="$HOME/.oh-my-org"
@@ -7,7 +7,7 @@ REPO_DIR="$HOME/.oh-my-org"
 check_for_updates() {
     if [ -d "$REPO_DIR/.git" ]; then
         cd "$REPO_DIR" || exit
-        git fetch origin
+        git fetch origin &>/dev/null
         LOCAL=$(git rev-parse @)
         REMOTE=$(git rev-parse @{u})
 
@@ -35,4 +35,4 @@ for script in "$REPO_DIR"/src/utils/*.sh; do
 done
 
 # Run the weather widget with default parameters
-bash $REPO_DIR/src/tools/widgets/weather.sh Traunreut 1
+bash "$REPO_DIR/src/tools/widgets/weather.sh" Traunreut 1

@@ -12,6 +12,7 @@ alias gitd="git diff"
 alias gitl="git log --oneline --graph --decorate"
 alias gitp="git pull"
 alias gits="git status"
+alias gitr="git remote -v"
 
 # Search: Shortcut for fuzzy finding
 alias fd="fdfind"
