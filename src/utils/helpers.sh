@@ -192,18 +192,19 @@ replace() {
     local search_text=$1
     local replace_text=$2
     local extension=$3
-    local case_sensitive=false
+    local ignore_case=false
     
     # Show help
     if [ "$1" = "-h" ] || [ "$1" = "--help" ] || [ $# -eq 0 ]; then
         echo "Usage: replace <search_text> <replace_text> [extension] [-i]"
         echo "Find and replace text recursively in files"
+        echo "  -i: ignore case"
         return 0
     fi
     
-    # Check for case-sensitive flag
+    # Check for ignore case flag
     if [ "$3" = "-i" ] || [ "$4" = "-i" ]; then
-        case_sensitive=true
+        ignore_case=true
         [ "$3" = "-i" ] && extension=""
     fi
     
@@ -220,18 +221,33 @@ replace() {
         pattern="*.${extension}"
     fi
     
-    # Build sed flags
-    local flags="s"
-    [ "$case_sensitive" = false ] && flags="s/i"
+    echo "Searching for files matching: $pattern"
+    echo "Looking for text: '$search_text'"
+    
+    # Build sed command
+    local sed_cmd
+    if [ "$ignore_case" = true ]; then
+        sed_cmd="s/${search_text}/${replace_text}/gI"
+    else
+        sed_cmd="s/${search_text}/${replace_text}/g"
+    fi
     
     # Find and replace
     local count=0
+    local files_found=0
     while IFS= read -r -d '' file; do
-        if sed -i "${flags}/${search_text}/${replace_text}/g" "$file" 2>/dev/null; then
-            echo "Replaced text in: $file"
-            ((count++))
+        ((files_found++))
+        echo "Checking file: $file"
+        if grep -q "$search_text" "$file" 2>/dev/null; then
+            if sed -i "$sed_cmd" "$file" 2>/dev/null; then
+                echo "Replaced text in: $file"
+                ((count++))
+            else
+                echo "Warning: Failed to replace in: $file"
+            fi
         fi
-    done < <(find . -name "$pattern" -type f -print0)
+    done < <(find . -name "$pattern" -type f -print0 2>/dev/null)
     
+    echo "Found $files_found file(s) matching pattern '$pattern'"
     echo "Replacement completed in $count file(s)."
 }
