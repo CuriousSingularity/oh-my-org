@@ -185,3 +185,53 @@ cd() {
         return 1
     fi
 }
+
+# Function to find and replace text recursively in files with specified extensions
+# Usage: replace <search_text> <replace_text> [extension] [-i]
+replace() {
+    local search_text=$1
+    local replace_text=$2
+    local extension=$3
+    local case_sensitive=false
+    
+    # Show help
+    if [ "$1" = "-h" ] || [ "$1" = "--help" ] || [ $# -eq 0 ]; then
+        echo "Usage: replace <search_text> <replace_text> [extension] [-i]"
+        echo "Find and replace text recursively in files"
+        return 0
+    fi
+    
+    # Check for case-sensitive flag
+    if [ "$3" = "-i" ] || [ "$4" = "-i" ]; then
+        case_sensitive=true
+        [ "$3" = "-i" ] && extension=""
+    fi
+    
+    # Validate inputs
+    if [ -z "$search_text" ] || [ -z "$replace_text" ]; then
+        echo "Error: Search and replace text are required." >&2
+        return 1
+    fi
+    
+    # Build find command
+    local pattern="*"
+    if [ -n "$extension" ] && [ "$extension" != "-i" ]; then
+        extension=${extension#.}
+        pattern="*.${extension}"
+    fi
+    
+    # Build sed flags
+    local flags="s"
+    [ "$case_sensitive" = false ] && flags="s/i"
+    
+    # Find and replace
+    local count=0
+    while IFS= read -r -d '' file; do
+        if sed -i "${flags}/${search_text}/${replace_text}/g" "$file" 2>/dev/null; then
+            echo "Replaced text in: $file"
+            ((count++))
+        fi
+    done < <(find . -name "$pattern" -type f -print0)
+    
+    echo "Replacement completed in $count file(s)."
+}
