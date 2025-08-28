@@ -251,3 +251,30 @@ replace() {
     echo "Found $files_found file(s) matching pattern '$pattern'"
     echo "Replacement completed in $count file(s)."
 }
+
+# Function to create a new tmux session with a name
+# Usage: tmn <session_name>
+tmn() {
+    local session_name=$1
+    
+    if [ -z "$session_name" ]; then
+        echo "Error: Session name is required." >&2
+        echo "Usage: tmn <session_name>" >&2
+        return 1
+    fi
+    
+    # Check if tmux is installed
+    if ! command -v tmux >/dev/null 2>&1; then
+        echo "Error: tmux is not installed." >&2
+        return 1
+    fi
+    
+    # Check if session already exists
+    if tmux has-session -t "$session_name" 2>/dev/null; then
+        echo "Session '$session_name' already exists. Attaching to it..."
+        tmux attach-session -t "$session_name"
+    else
+        echo "Creating new tmux session: $session_name"
+        tmux new-session -s "$session_name"
+    fi
+}
