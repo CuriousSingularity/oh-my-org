@@ -253,13 +253,13 @@ replace() {
 }
 
 # Function to create a new tmux session with a name
-# Usage: tmn <session_name>
-tmn() {
+# Usage: tmuxn <session_name>
+tmuxn() {
     local session_name=$1
     
     if [ -z "$session_name" ]; then
         echo "Error: Session name is required." >&2
-        echo "Usage: tmn <session_name>" >&2
+        echo "Usage: tmuxn <session_name>" >&2
         return 1
     fi
     
