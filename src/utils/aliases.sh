@@ -27,10 +27,9 @@ alias rmf="rm -rf"
 
 # Docker shortcuts
 alias dps="docker ps -a"
-alias drm="docker rm \$(docker ps -a -q)"
-alias drmi="docker rmi \$(docker images -f 'dangling=true' -q)"
+alias dstop="docker stop \$(docker ps -q)"
 alias drun="docker run -it --rm"
-alias drmall="docker rmi \$(docker images -q)"
+alias drmall="docker rmi -f \$(docker images -q)"
 
 # Weather widget
 alias wttr="bash \$HOME/.oh-my-org/src/tools/widgets/weather.sh"
