@@ -278,3 +278,56 @@ tmuxn() {
         tmux new-session -s "$session_name"
     fi
 }
+
+# Function to pack files into a tar archive
+# Usage: pack <file1> [file2] [file3] ...
+pack() {
+    local archive_name="pack.tar"
+    
+    if [ $# -eq 0 ]; then
+        echo "Error: At least one file is required." >&2
+        echo "Usage: pack <file1> [file2] [file3] ..." >&2
+        return 1
+    fi
+    
+    # Check if files exist
+    for file in "$@"; do
+        if [ ! -e "$file" ]; then
+            echo "Error: File or directory '$file' does not exist." >&2
+            return 1
+        fi
+    done
+    
+    echo "Creating tar archive: $archive_name"
+    if tar -cf "$archive_name" "$@"; then
+        echo "Archive '$archive_name' created successfully with $# item(s)."
+    else
+        echo "Error: Failed to create archive '$archive_name'." >&2
+        return 1
+    fi
+}
+
+# Function to unpack a tar archive
+# Usage: unpack <tar_file>
+unpack() {
+    local tar_file=$1
+    
+    if [ -z "$tar_file" ]; then
+        echo "Error: Tar file is required." >&2
+        echo "Usage: unpack <tar_file>" >&2
+        return 1
+    fi
+    
+    if [ ! -f "$tar_file" ]; then
+        echo "Error: File '$tar_file' does not exist." >&2
+        return 1
+    fi
+    
+    echo "Extracting tar archive: $tar_file"
+    if tar -xf "$tar_file"; then
+        echo "Archive '$tar_file' extracted successfully."
+    else
+        echo "Error: Failed to extract archive '$tar_file'." >&2
+        return 1
+    fi
+}
