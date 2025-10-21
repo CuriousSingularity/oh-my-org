@@ -46,5 +46,8 @@ for bin_script in "$REPO_DIR"/src/tools/bins/*.sh; do
     fi
 done
 
+# Update PATH to include the bin directory
+export PATH="$PATH:$REPO_DIR/bin"
+
 # Run the weather widget with default parameters
 bash "$REPO_DIR/src/tools/widgets/weather.sh" Traunreut 1
