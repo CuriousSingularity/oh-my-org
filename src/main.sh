@@ -40,11 +40,11 @@ if [ ! -d "$REPO_DIR/bin" ]; then
 fi
 
 # Run all the scripts in the src/tools/bins/ directory
-for bin_script in "$REPO_DIR"/src/tools/bins/*.sh; do
-    if [ -f "$bin_script" ]; then
-        bash "$bin_script" "$REPO_DIR/bin"
-    fi
-done
+# for bin_script in "$REPO_DIR"/src/tools/bins/*.sh; do
+#     if [ -f "$bin_script" ]; then
+#         bash "$bin_script" "$REPO_DIR/bin"
+#     fi
+# done
 
 # Update PATH to include the bin directory
 export PATH="$PATH:$REPO_DIR/bin"
