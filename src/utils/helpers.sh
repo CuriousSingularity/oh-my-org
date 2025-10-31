@@ -282,7 +282,7 @@ tmuxn() {
 # Function to pack files into a tar archive
 # Usage: pack <file1> [file2] [file3] ...
 pack() {
-    local archive_name="pack.tar"
+    local archive_name="pack.tar.gz"
     
     if [ $# -eq 0 ]; then
         echo "Error: At least one file is required." >&2
@@ -298,11 +298,11 @@ pack() {
         fi
     done
     
-    echo "Creating tar archive: $archive_name"
-    if tar -cf "$archive_name" "$@"; then
-        echo "Archive '$archive_name' created successfully with $# item(s)."
+    echo "Creating compressed tar archive: $archive_name"
+    if tar -czf "$archive_name" "$@"; then
+        echo "Compressed archive '$archive_name' created successfully with $# item(s)."
     else
-        echo "Error: Failed to create archive '$archive_name'." >&2
+        echo "Error: Failed to create compressed archive '$archive_name'." >&2
         return 1
     fi
 }
@@ -323,11 +323,37 @@ unpack() {
         return 1
     fi
     
-    echo "Extracting tar archive: $tar_file"
-    if tar -xf "$tar_file"; then
-        echo "Archive '$tar_file' extracted successfully."
-    else
-        echo "Error: Failed to extract archive '$tar_file'." >&2
-        return 1
-    fi
+    echo "Extracting archive: $tar_file"
+    
+    # Determine extraction method based on file extension
+    case "$tar_file" in
+        *.tar.gz|*.tgz)
+            if tar -xzf "$tar_file"; then
+                echo "Compressed tar archive '$tar_file' extracted successfully."
+            else
+                echo "Error: Failed to extract compressed tar archive '$tar_file'." >&2
+                return 1
+            fi
+            ;;
+        *.tar.bz2|*.tbz2)
+            if tar -xjf "$tar_file"; then
+                echo "Bzip2 compressed tar archive '$tar_file' extracted successfully."
+            else
+                echo "Error: Failed to extract bzip2 compressed tar archive '$tar_file'." >&2
+                return 1
+            fi
+            ;;
+        *.tar)
+            if tar -xf "$tar_file"; then
+                echo "Tar archive '$tar_file' extracted successfully."
+            else
+                echo "Error: Failed to extract tar archive '$tar_file'." >&2
+                return 1
+            fi
+            ;;
+        *)
+            echo "Error: Unsupported archive format. Supported formats: .tar, .tar.gz, .tgz, .tar.bz2, .tbz2" >&2
+            return 1
+            ;;
+    esac
 }
