@@ -282,6 +282,34 @@ tmuxn() {
 # Function to pack files into a tar archive
 # Usage: pack <file1> [file2] [file3] ...
 pack() {
+    local archive_name="pack.tar"
+    
+    if [ $# -eq 0 ]; then
+        echo "Error: At least one file is required." >&2
+        echo "Usage: pack <file1> [file2] [file3] ..." >&2
+        return 1
+    fi
+    
+    # Check if files exist
+    for file in "$@"; do
+        if [ ! -e "$file" ]; then
+            echo "Error: File or directory '$file' does not exist." >&2
+            return 1
+        fi
+    done
+    
+    echo "Creating tar archive: $archive_name"
+    if tar -cf "$archive_name" "$@"; then
+        echo "Archive '$archive_name' created successfully with $# item(s)."
+    else
+        echo "Error: Failed to create archive '$archive_name'." >&2
+        return 1
+    fi
+}
+
+# Function to pack files into a tar archive
+# Usage: pack <file1> [file2] [file3] ...
+packz() {
     local archive_name="pack.tar.gz"
     
     if [ $# -eq 0 ]; then
