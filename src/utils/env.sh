@@ -51,3 +51,17 @@ uvd() {
         deactivate
     fi
 }
+
+# Install dependencies with extras in the current virtual environment
+# Usage: uve <extra_name>
+# Requires an extra_name to be provided
+uve() {
+    local extra=${1}
+    if [[ -z "$extra" ]]; then
+        echo "Error: extra_name is required" >&2
+        echo "Usage: uve <extra_name>" >&2
+        return 1
+    fi
+    uv pip install --upgrade pip
+    uv pip install -e ".[$extra]"
+}
