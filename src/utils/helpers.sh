@@ -299,11 +299,26 @@ pack() {
     done
     
     echo "Creating tar archive: $archive_name"
-    if tar -cf "$archive_name" "$@"; then
-        echo "Archive '$archive_name' created successfully with $# item(s)."
+    
+    # Check if pv is available
+    if command -v pv >/dev/null 2>&1; then
+        # Calculate total size of files to archive
+        local total_size=$(du -sb "$@" 2>/dev/null | awk '{sum+=$1} END {print sum}')
+        
+        if tar -chf - "$@" | pv -s "$total_size" > "$archive_name"; then
+            echo "Archive '$archive_name' created successfully with $# item(s)."
+        else
+            echo "Error: Failed to create archive '$archive_name'." >&2
+            return 1
+        fi
     else
-        echo "Error: Failed to create archive '$archive_name'." >&2
-        return 1
+        # Fallback to regular tar without progress
+        if tar -chf "$archive_name" "$@"; then
+            echo "Archive '$archive_name' created successfully with $# item(s)."
+        else
+            echo "Error: Failed to create archive '$archive_name'." >&2
+            return 1
+        fi
     fi
 }
 
@@ -314,7 +329,7 @@ packz() {
     
     if [ $# -eq 0 ]; then
         echo "Error: At least one file is required." >&2
-        echo "Usage: pack <file1> [file2] [file3] ..." >&2
+        echo "Usage: packz <file1> [file2] [file3] ..." >&2
         return 1
     fi
     
@@ -327,11 +342,26 @@ packz() {
     done
     
     echo "Creating compressed tar archive: $archive_name"
-    if tar -czf "$archive_name" "$@"; then
-        echo "Compressed archive '$archive_name' created successfully with $# item(s)."
+    
+    # Check if pv is available
+    if command -v pv >/dev/null 2>&1; then
+        # Calculate total size of files to archive
+        local total_size=$(du -sb "$@" 2>/dev/null | awk '{sum+=$1} END {print sum}')
+        
+        if tar -czf - "$@" | pv -s "$total_size" > "$archive_name"; then
+            echo "Compressed archive '$archive_name' created successfully with $# item(s)."
+        else
+            echo "Error: Failed to create compressed archive '$archive_name'." >&2
+            return 1
+        fi
     else
-        echo "Error: Failed to create compressed archive '$archive_name'." >&2
-        return 1
+        # Fallback to regular tar without progress
+        if tar -czhf "$archive_name" "$@"; then
+            echo "Compressed archive '$archive_name' created successfully with $# item(s)."
+        else
+            echo "Error: Failed to create compressed archive '$archive_name'." >&2
+            return 1
+        fi
     fi
 }
 
