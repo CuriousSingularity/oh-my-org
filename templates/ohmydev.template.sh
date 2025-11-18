@@ -18,9 +18,9 @@ export OMD_UPDATE_CHECK_INTERVAL=86400
 export OMD_THEME="default"
 
 # Plugins to load (optional)
-# Available plugins: git, docker, uv, utils
+# Available plugins: git, docker, uv, utils, claude-code
 # Custom plugins can be placed in $OMD_DIR/custom/plugins/
-export OMD_PLUGINS=(git docker uv utils)
+export OMD_PLUGINS=(git docker uv utils claude-code)
 
 # Source Oh My Dev
 if [[ -f "$OMD_DIR/oh-my-dev.sh" ]]; then

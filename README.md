@@ -70,7 +70,7 @@ export OMD_UPDATE_CHECK_INTERVAL=86400  # 24 hours
 # export OMD_THEME="default"
 
 # Optional: Enable plugins
-# export OMD_PLUGINS=(git docker uv utils)
+# export OMD_PLUGINS=(git docker uv utils claude-code)
 
 # Source Oh My Dev
 source "$OMD_DIR/oh-my-dev.sh"
@@ -108,7 +108,7 @@ omd_update
 Enable plugins by adding them to the `OMD_PLUGINS` array in your shell configuration:
 
 ```bash
-export OMD_PLUGINS=(git docker uv utils)
+export OMD_PLUGINS=(git docker uv utils claude-code)
 ```
 
 #### 📚 Available Plugins
@@ -149,6 +149,13 @@ export OMD_PLUGINS=(git docker uv utils)
   - **Productivity:**
     - `run <times> <command> [args]` - Run command N times
     - `tmuxn <session_name>` - Create or attach to tmux session
+
+- **🤖 claude-code**: Claude CLI setup and Vertex AI configuration
+  - `claude_install` - Install Claude CLI
+  - `claude_setup_vertex <creds-path> <project-id> [region]` - Configure Vertex AI
+  - `claude_status` - Show installation and configuration status
+  - Aliases: `claude-install`, `claude-config`, `claude-status`
+  - References: [Claude Code Setup](https://docs.anthropic.com/en/docs/claude-code/setup)
 
 #### ✍️ Creating Custom Plugins
 
@@ -252,7 +259,8 @@ This will remove Oh My Dev and clean up your shell configuration.
 │   ├── git/
 │   ├── docker/
 │   ├── uv/
-│   └── utils/
+│   ├── utils/
+│   └── claude-code/
 ├── themes/               # Default themes
 │   └── default.theme.sh
 ├── tools/                # Installation and management scripts
