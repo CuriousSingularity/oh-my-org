@@ -16,20 +16,20 @@ A delightful terminal organization framework inspired by oh-my-zsh, with automat
 ### Quick Install
 
 ```bash
-bash -c "$(curl -fsSL https://raw.githubusercontent.com/yourusername/oh-my-org/main/tools/install.sh)"
+bash -c "$(curl -fsSL https://raw.githubusercontent.com/curioussingularity/oh-my-org/main/tools/install.sh)"
 ```
 
 Or with wget:
 
 ```bash
-bash -c "$(wget -qO- https://raw.githubusercontent.com/yourusername/oh-my-org/main/tools/install.sh)"
+bash -c "$(wget -qO- https://raw.githubusercontent.com/curioussingularity/oh-my-org/main/tools/install.sh)"
 ```
 
 ### Manual Installation
 
 1. Clone the repository:
 ```bash
-git clone https://github.com/yourusername/oh-my-org.git ~/.oh-my-org
+git clone https://github.com/curioussingularity/oh-my-org.git ~/.oh-my-org
 ```
 
 2. Add to your shell configuration (`~/.zshrc` or `~/.bashrc`):
@@ -227,4 +227,4 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 
 ## Support
 
-If you encounter any issues or have questions, please [open an issue](https://github.com/yourusername/oh-my-org/issues) on GitHub.
+If you encounter any issues or have questions, please [open an issue](https://github.com/curioussingularity/oh-my-org/issues) on GitHub.

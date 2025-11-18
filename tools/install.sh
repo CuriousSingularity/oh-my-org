@@ -12,7 +12,7 @@ RESET="\033[0m"
 
 # Configuration
 OMO_DIR="${OMO_DIR:-$HOME/.oh-my-org}"
-OMO_REPO="${OMO_REPO:-https://github.com/yourusername/oh-my-org.git}"
+OMO_REPO="${OMO_REPO:-https://github.com/curioussingularity/oh-my-org.git}"
 
 print_info() {
   echo -e "${BLUE}[Oh My Org]${RESET} $1"
