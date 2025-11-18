@@ -108,7 +108,7 @@ omo_update
 Enable plugins by adding them to the `OMO_PLUGINS` array in your shell configuration:
 
 ```bash
-export OMO_PLUGINS=(git docker kubectl)
+export OMO_PLUGINS=(git docker uv)
 ```
 
 #### 📚 Available Plugins
@@ -120,6 +120,16 @@ export OMO_PLUGINS=(git docker kubectl)
 - **🐳 docker**: Docker and Docker Compose aliases
   - Aliases: `d`, `dc`, `dps`, `di`, `dexec`, etc.
   - Functions: `dcleanup`, `dstopall`, `drmall`
+
+- **🐍 uv**: Python virtual environment management with UV
+  - `uvc [python_version] [venv_dir]` - Create and activate venv (default: 3.8, .venv)
+  - `uvu` - Install/upgrade dependencies from current project
+  - `uvk [venv_dir]` - Install IPython kernel for Jupyter
+  - `uvf [python_version] [venv_dir]` - Full setup (create + install + kernel)
+  - `uvr [venv_dir]` - Remove virtual environment
+  - `uva [venv_dir]` - Activate virtual environment
+  - `uvd` - Deactivate current virtual environment
+  - `uve <extra_name>` - Install dependencies with extras (e.g., `uve dev`)
 
 #### ✍️ Creating Custom Plugins
 

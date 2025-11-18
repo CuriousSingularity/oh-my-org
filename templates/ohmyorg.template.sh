@@ -18,9 +18,9 @@ export OMO_UPDATE_CHECK_INTERVAL=86400
 export OMO_THEME="default"
 
 # Plugins to load (optional)
-# Available plugins: git, docker
+# Available plugins: git, docker, uv
 # Custom plugins can be placed in $OMO_DIR/custom/plugins/
-export OMO_PLUGINS=(git docker)
+export OMO_PLUGINS=(git docker uv)
 
 # Source Oh My Org
 if [[ -f "$OMO_DIR/oh-my-org.sh" ]]; then
