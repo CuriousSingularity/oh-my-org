@@ -139,23 +139,18 @@ jobs:
     - name: Test sourcing oh-my-org.sh
       env:
         TERM: xterm-256color
-      shell: ${{ matrix.shell }} {0}
       run: |
         export OMO_DIR="$HOME/.oh-my-org-test"
         export OMO_AUTO_UPDATE=false
-        source "$HOME/.oh-my-org-test/oh-my-org.sh"
+        ${{ matrix.shell }} -c "source $HOME/.oh-my-org-test/oh-my-org.sh"
         echo "✓ Successfully sourced oh-my-org.sh"
 
     - name: Test plugin loading
       env:
         TERM: xterm-256color
-      shell: ${{ matrix.shell }} {0}
       run: |
-        # Enable alias expansion (needed for non-interactive shells)
-        if [ -n "$BASH_VERSION" ]; then
-          shopt -s expand_aliases
-        fi
-
+        ${{ matrix.shell }} -c '
+        shopt -s expand_aliases 2>/dev/null || true
         export OMO_DIR="$HOME/.oh-my-org-test"
         export OMO_AUTO_UPDATE=false
         export OMO_PLUGINS=(git docker)
@@ -170,17 +165,19 @@ jobs:
         type dc >/dev/null 2>&1 || exit 1
 
         echo "✓ Plugins loaded successfully"
+        '
 
     - name: Test theme loading
       env:
         TERM: xterm-256color
-      shell: ${{ matrix.shell }} {0}
       run: |
+        ${{ matrix.shell }} -c '
         export OMO_DIR="$HOME/.oh-my-org-test"
         export OMO_AUTO_UPDATE=false
         export OMO_THEME="default"
         source "$HOME/.oh-my-org-test/oh-my-org.sh"
         echo "✓ Theme loaded successfully"
+        '
 
   verify-structure:
     name: Verify Project Structure
