@@ -13,6 +13,7 @@ if [[ "$OMO_AUTO_UPDATE" != "false" ]]; then
   source "$OMO_DIR/lib/auto-update.sh"
   # Run in background (zsh uses &!, bash uses & with disown)
   if [[ -n "$ZSH_VERSION" ]]; then
+    # shellcheck disable=SC1035,SC1073,SC1072
     omo_check_for_updates &!
   else
     omo_check_for_updates & disown
