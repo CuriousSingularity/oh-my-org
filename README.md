@@ -70,7 +70,7 @@ export OMD_UPDATE_CHECK_INTERVAL=86400  # 24 hours
 # export OMD_THEME="default"
 
 # Optional: Enable plugins
-# export OMD_PLUGINS=(git docker uv utils claude-code)
+# export OMD_PLUGINS=(git docker uv utils claude-code gemini)
 
 # Source Oh My Dev
 source "$OMD_DIR/oh-my-dev.sh"
@@ -108,7 +108,7 @@ omd_update
 Enable plugins by adding them to the `OMD_PLUGINS` array in your shell configuration:
 
 ```bash
-export OMD_PLUGINS=(git docker uv utils claude-code)
+export OMD_PLUGINS=(git docker uv utils claude-code gemini)
 ```
 
 #### 📚 Available Plugins
@@ -156,6 +156,14 @@ export OMD_PLUGINS=(git docker uv utils claude-code)
   - `claude_status` - Show installation and configuration status
   - Aliases: `claude-install`, `claude-config`, `claude-status`
   - References: [Claude Code Setup](https://docs.anthropic.com/en/docs/claude-code/setup)
+
+- **✨ gemini**: Google Gemini CLI setup and configuration
+  - `gemini_install` - Install Gemini CLI via npm
+  - `gemini_setup_api <api-key>` - Configure API key for AI Studio
+  - `gemini_setup_vertex <google-api-key>` - Configure for Vertex AI
+  - `gemini_status` - Show installation and configuration status
+  - Aliases: `gemini-install`, `gemini-config-api`, `gemini-config-vertex`, `gemini-status`
+  - References: [Gemini CLI](https://github.com/google-gemini/gemini-cli) | [Get API Key](https://aistudio.google.com/apikey)
 
 #### ✍️ Creating Custom Plugins
 
@@ -260,7 +268,8 @@ This will remove Oh My Dev and clean up your shell configuration.
 │   ├── docker/
 │   ├── uv/
 │   ├── utils/
-│   └── claude-code/
+│   ├── claude-code/
+│   └── gemini/
 ├── themes/               # Default themes
 │   └── default.theme.sh
 ├── tools/                # Installation and management scripts
