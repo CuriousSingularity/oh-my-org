@@ -1,19 +1,19 @@
-# Oh My Org
+# 🎯 Oh My Org
 
 A delightful terminal organization framework inspired by oh-my-zsh, with automatic git updates, plugin system, and theme support for bash and zsh.
 
-## Features
+## ✨ Features
 
-- **Auto-Update**: Automatically checks for and pulls the latest updates from git every time you open your terminal
-- **Plugin System**: Extend functionality with a modular plugin architecture
-- **Theme Support**: Customize your terminal prompt with themes
-- **Cross-Shell**: Works with both bash and zsh
-- **Lightweight**: Minimal overhead on shell startup
-- **Extensible**: Easy to create custom plugins and themes
+- **🔄 Auto-Update**: Automatically checks for and pulls the latest updates from git every time you open your terminal
+- **🔌 Plugin System**: Extend functionality with a modular plugin architecture
+- **🎨 Theme Support**: Customize your terminal prompt with themes
+- **🐚 Cross-Shell**: Works with both bash and zsh
+- **⚡ Lightweight**: Minimal overhead on shell startup
+- **🔧 Extensible**: Easy to create custom plugins and themes
 
-## Installation
+## 📦 Installation
 
-### Quick Install
+### ⚡ Quick Install
 
 ```bash
 bash -c "$(curl -fsSL https://raw.githubusercontent.com/curioussingularity/oh-my-org/main/tools/install.sh)"
@@ -25,7 +25,7 @@ Or with wget:
 bash -c "$(wget -qO- https://raw.githubusercontent.com/curioussingularity/oh-my-org/main/tools/install.sh)"
 ```
 
-### Manual Installation
+### 🔨 Manual Installation
 
 1. Clone the repository:
 ```bash
@@ -54,9 +54,9 @@ source "$OMO_DIR/oh-my-org.sh"
 source ~/.zshrc  # or ~/.bashrc
 ```
 
-## Configuration
+## ⚙️ Configuration
 
-### Auto-Update Settings
+### 🔄 Auto-Update Settings
 
 Oh My Org automatically checks for updates every time you open a new terminal session. You can configure this behavior:
 
@@ -68,7 +68,7 @@ export OMO_AUTO_UPDATE=false
 export OMO_UPDATE_CHECK_INTERVAL=43200  # 12 hours
 ```
 
-### Manual Update
+### 🔄 Manual Update
 
 You can manually trigger an update at any time:
 
@@ -76,7 +76,7 @@ You can manually trigger an update at any time:
 omo_update
 ```
 
-### Plugins
+### 🔌 Plugins
 
 Enable plugins by adding them to the `OMO_PLUGINS` array in your shell configuration:
 
@@ -84,17 +84,17 @@ Enable plugins by adding them to the `OMO_PLUGINS` array in your shell configura
 export OMO_PLUGINS=(git docker kubectl)
 ```
 
-#### Available Plugins
+#### 📚 Available Plugins
 
-- **git**: Git aliases and functions
+- **📂 git**: Git aliases and functions
   - Aliases: `g`, `ga`, `gc`, `gco`, `gst`, `glog`, etc.
   - Functions: `gclean`, `gbranch`, `gremote`
 
-- **docker**: Docker and Docker Compose aliases
+- **🐳 docker**: Docker and Docker Compose aliases
   - Aliases: `d`, `dc`, `dps`, `di`, `dexec`, etc.
   - Functions: `dcleanup`, `dstopall`, `drmall`
 
-#### Creating Custom Plugins
+#### ✍️ Creating Custom Plugins
 
 1. Create a plugin directory in `~/.oh-my-org/custom/plugins/`:
 ```bash
@@ -118,7 +118,7 @@ my_function() {
 export OMO_PLUGINS=(myplugin)
 ```
 
-### Themes
+### 🎨 Themes
 
 Set your theme by exporting the `OMO_THEME` variable:
 
@@ -126,11 +126,11 @@ Set your theme by exporting the `OMO_THEME` variable:
 export OMO_THEME="default"
 ```
 
-#### Available Themes
+#### 🎭 Available Themes
 
 - **default**: Clean and simple prompt with git branch display
 
-#### Creating Custom Themes
+#### ✨ Creating Custom Themes
 
 1. Create a theme file in `~/.oh-my-org/custom/themes/`:
 ```bash
@@ -154,17 +154,17 @@ fi
 export OMO_THEME="mytheme"
 ```
 
-### Custom Configurations
+### 🛠️ Custom Configurations
 
 Add your custom shell configurations in `~/.oh-my-org/custom/custom.sh`. This file is sourced after all plugins and themes, allowing you to override or extend functionality.
 
-## Commands
+## 💻 Commands
 
 - `omo_update` - Manually check for and install updates
 - `omo_list_plugins` - List all available plugins
 - `omo_list_themes` - List all available themes
 
-## Uninstallation
+## 🗑️ Uninstallation
 
 Run the uninstall script:
 
@@ -174,7 +174,7 @@ bash ~/.oh-my-org/tools/uninstall.sh
 
 This will remove Oh My Org and clean up your shell configuration.
 
-## How Auto-Update Works
+## 🔍 How Auto-Update Works
 
 1. Every time you open a new terminal, Oh My Org checks if it's time to check for updates (based on `OMO_UPDATE_CHECK_INTERVAL`)
 2. If it's time, it runs `git fetch` in the background to check for new commits
@@ -182,7 +182,7 @@ This will remove Oh My Org and clean up your shell configuration.
 4. The update process runs asynchronously to avoid slowing down terminal startup
 5. A timestamp is stored in `~/.oh-my-org/.last_update_check` to track the last check time
 
-## Directory Structure
+## 📁 Directory Structure
 
 ```
 ~/.oh-my-org/
@@ -206,7 +206,7 @@ This will remove Oh My Org and clean up your shell configuration.
     └── themes/
 ```
 
-## Contributing
+## 🤝 Contributing
 
 Contributions are welcome! Please feel free to submit a Pull Request.
 
@@ -216,15 +216,15 @@ Contributions are welcome! Please feel free to submit a Pull Request.
 4. Push to the branch (`git push origin feature/amazing-feature`)
 5. Open a Pull Request
 
-## License
+## 📄 License
 
 This project is licensed under the MIT License - see the LICENSE file for details.
 
-## Acknowledgments
+## 🙏 Acknowledgments
 
 - Inspired by [oh-my-zsh](https://github.com/ohmyzsh/ohmyzsh)
 - Thanks to all contributors who help improve this project
 
-## Support
+## 💬 Support
 
 If you encounter any issues or have questions, please [open an issue](https://github.com/curioussingularity/oh-my-org/issues) on GitHub.
