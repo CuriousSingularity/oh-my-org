@@ -27,7 +27,10 @@ print_error() {
 }
 
 print_welcome() {
-  clear
+  # Clear screen only if TERM is set (not in CI environments)
+  if [[ -n "$TERM" ]]; then
+    clear
+  fi
   echo -e "${BLUE}"
   cat << "EOF"
   ██████╗  ██╗  ██╗
