@@ -10,6 +10,7 @@ jobs:
   lint:
     name: Lint Shell Scripts
     runs-on: ubuntu-latest
+    timeout-minutes: 10
 
     steps:
     - name: Checkout code
@@ -25,20 +26,23 @@ jobs:
   test-syntax:
     name: Test Shell Syntax
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     strategy:
       matrix:
         shell: [bash, zsh]
+      fail-fast: false
 
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
 
     - name: Install ${{ matrix.shell }}
+      if: matrix.shell == 'zsh'
+      env:
+        DEBIAN_FRONTEND: noninteractive
       run: |
-        if [ "${{ matrix.shell }}" = "zsh" ]; then
-          sudo apt-get update
-          sudo apt-get install -y zsh
-        fi
+        sudo apt-get update -qq
+        sudo apt-get install -y -qq zsh
 
     - name: Test syntax - oh-my-org.sh
       run: ${{ matrix.shell }} -n oh-my-org.sh
@@ -74,20 +78,23 @@ jobs:
   test-install:
     name: Test Installation
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     strategy:
       matrix:
         shell: [bash, zsh]
+      fail-fast: false
 
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
 
     - name: Install ${{ matrix.shell }}
+      if: matrix.shell == 'zsh'
+      env:
+        DEBIAN_FRONTEND: noninteractive
       run: |
-        if [ "${{ matrix.shell }}" = "zsh" ]; then
-          sudo apt-get update
-          sudo apt-get install -y zsh
-        fi
+        sudo apt-get update -qq
+        sudo apt-get install -y -qq zsh
 
     - name: Set default shell
       run: |
@@ -162,6 +169,7 @@ jobs:
   verify-structure:
     name: Verify Project Structure
     runs-on: ubuntu-latest
+    timeout-minutes: 5
 
     steps:
     - name: Checkout code
