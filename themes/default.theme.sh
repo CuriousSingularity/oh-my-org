@@ -14,7 +14,8 @@ THEME_RESET="\033[0m"
 # Get git branch if in a git repository
 omo_git_branch() {
   if command -v git >/dev/null 2>&1; then
-    local branch=$(git symbolic-ref --short HEAD 2>/dev/null)
+    local branch
+    branch=$(git symbolic-ref --short HEAD 2>/dev/null)
     if [[ -n "$branch" ]]; then
       echo " ($branch)"
     fi
@@ -25,6 +26,7 @@ omo_git_branch() {
 if [[ -n "$ZSH_VERSION" ]]; then
   # ZSH prompt
   setopt PROMPT_SUBST
+  # shellcheck disable=SC2034
   PROMPT='%{$THEME_USER_COLOR%}%n%{$THEME_RESET%}@%{$THEME_HOST_COLOR%}%m%{$THEME_RESET%}:%{$THEME_DIR_COLOR%}%~%{$THEME_RESET%}%{$THEME_GIT_COLOR%}$(omo_git_branch)%{$THEME_RESET%} $ '
 elif [[ -n "$BASH_VERSION" ]]; then
   # Bash prompt

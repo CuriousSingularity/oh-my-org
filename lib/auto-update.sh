@@ -11,8 +11,10 @@ omo_should_check_updates() {
     return 0
   fi
 
-  local last_check=$(cat "$OMO_UPDATE_FILE" 2>/dev/null || echo 0)
-  local current_time=$(omo_timestamp)
+  local last_check
+  last_check=$(cat "$OMO_UPDATE_FILE" 2>/dev/null || echo 0)
+  local current_time
+  current_time=$(omo_timestamp)
   local time_diff=$((current_time - last_check))
 
   [[ $time_diff -ge $OMO_UPDATE_CHECK_INTERVAL ]]
@@ -47,8 +49,10 @@ omo_check_for_updates() {
   git fetch origin >/dev/null 2>&1
 
   # Check if there are updates
-  local local_commit=$(git rev-parse HEAD)
-  local remote_commit=$(git rev-parse origin/main 2>/dev/null || git rev-parse origin/master 2>/dev/null)
+  local local_commit
+  local_commit=$(git rev-parse HEAD)
+  local remote_commit
+  remote_commit=$(git rev-parse origin/main 2>/dev/null || git rev-parse origin/master 2>/dev/null)
 
   if [[ "$local_commit" != "$remote_commit" ]]; then
     omo_perform_update
@@ -93,8 +97,10 @@ omo_update() {
 
   git fetch origin
 
-  local local_commit=$(git rev-parse HEAD)
-  local remote_commit=$(git rev-parse origin/main 2>/dev/null || git rev-parse origin/master 2>/dev/null)
+  local local_commit
+  local_commit=$(git rev-parse HEAD)
+  local remote_commit
+  remote_commit=$(git rev-parse origin/main 2>/dev/null || git rev-parse origin/master 2>/dev/null)
 
   if [[ "$local_commit" == "$remote_commit" ]]; then
     omo_success "Oh My Org is already up to date!"

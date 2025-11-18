@@ -36,9 +36,11 @@ dcleanup() {
 }
 
 dstopall() {
+  # shellcheck disable=SC2046
   docker stop $(docker ps -q)
 }
 
 drmall() {
+  # shellcheck disable=SC2046
   docker rm $(docker ps -a -q)
 }

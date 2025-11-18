@@ -1,3 +1,4 @@
+#!/usr/bin/env bash
 # Oh My Org Configuration Template
 # Copy this to your ~/.zshrc or ~/.bashrc
 

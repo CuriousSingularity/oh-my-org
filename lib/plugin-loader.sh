@@ -26,6 +26,7 @@ omo_load_plugin() {
     return 1
   fi
 
+  # shellcheck disable=SC1090
   source "$plugin_path"
 }
 

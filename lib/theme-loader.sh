@@ -17,6 +17,7 @@ omo_load_theme() {
     return 1
   fi
 
+  # shellcheck disable=SC1090
   source "$theme_path"
 }
 

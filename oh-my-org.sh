@@ -11,7 +11,12 @@ source "$OMO_DIR/lib/utils.sh"
 # Auto-update check (runs in background to not slow down shell startup)
 if [[ "$OMO_AUTO_UPDATE" != "false" ]]; then
   source "$OMO_DIR/lib/auto-update.sh"
-  omo_check_for_updates &!
+  # Run in background (zsh uses &!, bash uses & with disown)
+  if [[ -n "$ZSH_VERSION" ]]; then
+    omo_check_for_updates &!
+  else
+    omo_check_for_updates & disown
+  fi
 fi
 
 # Load theme
