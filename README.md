@@ -108,7 +108,7 @@ omo_update
 Enable plugins by adding them to the `OMO_PLUGINS` array in your shell configuration:
 
 ```bash
-export OMO_PLUGINS=(git docker uv)
+export OMO_PLUGINS=(git docker uv utils)
 ```
 
 #### 📚 Available Plugins
@@ -130,6 +130,25 @@ export OMO_PLUGINS=(git docker uv)
   - `uva [venv_dir]` - Activate virtual environment
   - `uvd` - Deactivate current virtual environment
   - `uve <extra_name>` - Install dependencies with extras (e.g., `uve dev`)
+
+- **🛠️ utils**: General-purpose shell utilities for productivity
+  - **Navigation:**
+    - `up [levels]` - Go up N directory levels (default: 1)
+    - `cd <path>` - Enhanced cd that handles files (goes to parent directory)
+  - **Math:**
+    - `percentage <original> <new>` - Calculate percentage change
+    - `percentage_value <number> <percent>` - Apply percentage change
+    - `mul <num1> <num2>` - Multiply two numbers
+    - `div <dividend> <divisor>` - Divide two numbers
+  - **File Operations:**
+    - `swap <file1> <file2>` - Swap names of two files/directories
+    - `replace <search> <replace> [ext] [-i]` - Find and replace in files
+    - `pack <files...>` - Create tar archive
+    - `packz <files...>` - Create compressed tar.gz archive
+    - `unpack <archive>` - Extract tar archives (.tar, .tar.gz, .tar.bz2)
+  - **Productivity:**
+    - `run <times> <command> [args]` - Run command N times
+    - `tmuxn <session_name>` - Create or attach to tmux session
 
 #### ✍️ Creating Custom Plugins
 
