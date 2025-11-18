@@ -26,6 +26,61 @@ print_error() {
   echo -e "${RED}[Oh My Org]${RESET} $1"
 }
 
+print_welcome() {
+  clear
+  echo -e "${BLUE}"
+  cat << "EOF"
+   ___  _       __  __         ___
+  / _ \| |__   |  \/  |_   _  / _ \ _ __ __ _
+ | | | | '_ \  | |\/| | | | || | | | '__/ _` |
+ | |_| | | | | | |  | | |_| || |_| | | | (_| |
+  \___/|_| |_| |_|  |_|\__, | \___/|_|  \__, |
+                       |___/            |___/
+EOF
+  echo -e "${RESET}"
+  echo -e "${GREEN}╔════════════════════════════════════════════════╗${RESET}"
+  echo -e "${GREEN}║                                                ║${RESET}"
+  echo -e "${GREEN}║${RESET}  🎯 Terminal Organization Framework          ${GREEN}║${RESET}"
+  echo -e "${GREEN}║${RESET}  ✨ Auto-update • Plugins • Themes           ${GREEN}║${RESET}"
+  echo -e "${GREEN}║${RESET}  🐚 Works with Bash & Zsh                    ${GREEN}║${RESET}"
+  echo -e "${GREEN}║                                                ║${RESET}"
+  echo -e "${GREEN}╚════════════════════════════════════════════════╝${RESET}"
+  echo ""
+}
+
+print_completion() {
+  echo ""
+  echo -e "${GREEN}╔════════════════════════════════════════════════╗${RESET}"
+  echo -e "${GREEN}║                                                ║${RESET}"
+  echo -e "${GREEN}║${RESET}  ${GREEN}✓${RESET} Installation Complete!                    ${GREEN}║${RESET}"
+  echo -e "${GREEN}║                                                ║${RESET}"
+  echo -e "${GREEN}╚════════════════════════════════════════════════╝${RESET}"
+  echo ""
+  echo -e "${BLUE}📋 Next Steps:${RESET}"
+  echo ""
+  echo -e "  ${YELLOW}1.${RESET} Restart your terminal, or run:"
+  echo -e "     ${GREEN}source $SHELL_RC${RESET}"
+  echo ""
+  echo -e "  ${YELLOW}2.${RESET} Enable plugins (optional):"
+  echo -e "     ${GREEN}export OMO_PLUGINS=(git docker)${RESET}"
+  echo ""
+  echo -e "  ${YELLOW}3.${RESET} Set a theme (optional):"
+  echo -e "     ${GREEN}export OMO_THEME=\"default\"${RESET}"
+  echo ""
+  echo -e "${BLUE}📚 Configuration:${RESET}"
+  echo -e "  • Main config: ${YELLOW}$SHELL_RC${RESET}"
+  echo -e "  • Custom config: ${YELLOW}$OMO_DIR/custom/custom.sh${RESET}"
+  echo ""
+  echo -e "${BLUE}🔗 Documentation:${RESET}"
+  echo -e "  ${YELLOW}https://github.com/curioussingularity/oh-my-org${RESET}"
+  echo ""
+  echo -e "${GREEN}Happy organizing! 🚀${RESET}"
+  echo ""
+}
+
+# Show welcome screen
+print_welcome
+
 # Check if git is installed
 if ! command -v git >/dev/null 2>&1; then
   print_error "Git is not installed. Please install git first."
@@ -114,13 +169,5 @@ else
   print_success "Oh My Org added to $SHELL_RC"
 fi
 
-echo ""
-print_success "Oh My Org installed successfully!"
-echo ""
-print_info "To start using Oh My Org, either:"
-print_info "  1. Restart your terminal"
-print_info "  2. Run: source $SHELL_RC"
-echo ""
-print_info "To configure Oh My Org, edit: $SHELL_RC"
-print_info "For custom configurations, edit: $OMO_DIR/custom/custom.sh"
-echo ""
+# Show completion message
+print_completion
