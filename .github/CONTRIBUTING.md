@@ -1,6 +1,6 @@
-# Contributing to Oh My Org
+# Contributing to Oh My Dev
 
-Thank you for your interest in contributing to Oh My Org! This document provides guidelines and instructions for contributing.
+Thank you for your interest in contributing to Oh My Dev! This document provides guidelines and instructions for contributing.
 
 ## How to Contribute
 
@@ -35,7 +35,7 @@ Feature suggestions are welcome! Please open an issue with:
 ### Code Style
 
 - Use `#!/usr/bin/env bash` shebang for all scripts
-- Prefix all Oh My Org functions with `omo_`
+- Prefix all Oh My Dev functions with `omd_`
 - Use lowercase with underscores for variable names
 - Quote variables to handle spaces: `"$VAR"`
 - Use double brackets `[[ ]]` for conditionals

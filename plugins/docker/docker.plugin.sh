@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Docker plugin for Oh My Org
+# Docker plugin for Oh My Dev
 # Provides useful docker aliases and functions
 
 # Docker aliases

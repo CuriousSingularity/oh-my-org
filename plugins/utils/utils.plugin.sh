@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Utils plugin for Oh My Org
+# Utils plugin for Oh My Dev
 # Provides general-purpose utility functions for shell productivity
 
 # Function to navigate up a specified number of directory levels

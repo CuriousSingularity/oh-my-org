@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Git plugin for Oh My Org
+# Git plugin for Oh My Dev
 # Provides useful git aliases and functions
 
 # Git aliases

@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# UV plugin for Oh My Org
+# UV plugin for Oh My Dev
 # Provides helper functions for managing Python virtual environments with uv
 
 DEFAULT_PYTHON_VERSION=3.8
