@@ -105,6 +105,8 @@ jobs:
         fi
 
     - name: Test installation script (dry run)
+      env:
+        TERM: xterm-256color
       run: |
         export OMO_DIR="$HOME/.oh-my-org-test"
         export OMO_REPO="file://$(pwd)"
@@ -135,6 +137,8 @@ jobs:
         echo "✓ All required files and directories exist"
 
     - name: Test sourcing oh-my-org.sh
+      env:
+        TERM: xterm-256color
       run: |
         export OMO_DIR="$HOME/.oh-my-org-test"
         export OMO_AUTO_UPDATE=false
@@ -142,6 +146,8 @@ jobs:
         echo "✓ Successfully sourced oh-my-org.sh"
 
     - name: Test plugin loading
+      env:
+        TERM: xterm-256color
       run: |
         export OMO_DIR="$HOME/.oh-my-org-test"
         export OMO_AUTO_UPDATE=false
@@ -159,6 +165,8 @@ jobs:
         echo "✓ Plugins loaded successfully"
 
     - name: Test theme loading
+      env:
+        TERM: xterm-256color
       run: |
         export OMO_DIR="$HOME/.oh-my-org-test"
         export OMO_AUTO_UPDATE=false
