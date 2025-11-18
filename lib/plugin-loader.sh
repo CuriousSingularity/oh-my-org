@@ -1,28 +1,28 @@
 #!/usr/bin/env bash
-# Plugin loader for Oh My Org
+# Plugin loader for Oh My Dev
 
 # Load all enabled plugins
-omo_load_plugins() {
+omd_load_plugins() {
   local plugin
 
-  for plugin in "${OMO_PLUGINS[@]}"; do
-    omo_load_plugin "$plugin"
+  for plugin in "${OMD_PLUGINS[@]}"; do
+    omd_load_plugin "$plugin"
   done
 }
 
 # Load a single plugin
-omo_load_plugin() {
+omd_load_plugin() {
   local plugin="$1"
   local plugin_path
 
   # Check in custom plugins directory first
-  if [[ -f "$OMO_DIR/custom/plugins/$plugin/$plugin.plugin.sh" ]]; then
-    plugin_path="$OMO_DIR/custom/plugins/$plugin/$plugin.plugin.sh"
+  if [[ -f "$OMD_DIR/custom/plugins/$plugin/$plugin.plugin.sh" ]]; then
+    plugin_path="$OMD_DIR/custom/plugins/$plugin/$plugin.plugin.sh"
   # Then check in default plugins directory
-  elif [[ -f "$OMO_DIR/plugins/$plugin/$plugin.plugin.sh" ]]; then
-    plugin_path="$OMO_DIR/plugins/$plugin/$plugin.plugin.sh"
+  elif [[ -f "$OMD_DIR/plugins/$plugin/$plugin.plugin.sh" ]]; then
+    plugin_path="$OMD_DIR/plugins/$plugin/$plugin.plugin.sh"
   else
-    omo_warning "Plugin '$plugin' not found"
+    omd_warning "Plugin '$plugin' not found"
     return 1
   fi
 
@@ -31,14 +31,14 @@ omo_load_plugin() {
 }
 
 # List available plugins
-omo_list_plugins() {
+omd_list_plugins() {
   echo "Available plugins:"
   echo ""
 
   # List default plugins
-  if [[ -d "$OMO_DIR/plugins" ]]; then
+  if [[ -d "$OMD_DIR/plugins" ]]; then
     echo "Default plugins:"
-    for plugin_dir in "$OMO_DIR/plugins"/*; do
+    for plugin_dir in "$OMD_DIR/plugins"/*; do
       if [[ -d "$plugin_dir" ]]; then
         echo "  - $(basename "$plugin_dir")"
       fi
@@ -46,10 +46,10 @@ omo_list_plugins() {
   fi
 
   # List custom plugins
-  if [[ -d "$OMO_DIR/custom/plugins" ]]; then
+  if [[ -d "$OMD_DIR/custom/plugins" ]]; then
     echo ""
     echo "Custom plugins:"
-    for plugin_dir in "$OMO_DIR/custom/plugins"/*; do
+    for plugin_dir in "$OMD_DIR/custom/plugins"/*; do
       if [[ -d "$plugin_dir" ]]; then
         echo "  - $(basename "$plugin_dir")"
       fi

@@ -1,44 +1,44 @@
 #!/usr/bin/env bash
-# Auto-update functionality for Oh My Org
+# Auto-update functionality for Oh My Dev
 
 # Configuration
-OMO_UPDATE_CHECK_INTERVAL="${OMO_UPDATE_CHECK_INTERVAL:-86400}" # Default: 24 hours
-OMO_UPDATE_FILE="$OMO_DIR/.last_update_check"
+OMD_UPDATE_CHECK_INTERVAL="${OMD_UPDATE_CHECK_INTERVAL:-86400}" # Default: 24 hours
+OMD_UPDATE_FILE="$OMD_DIR/.last_update_check"
 
 # Check if it's time to check for updates
-omo_should_check_updates() {
-  if [[ ! -f "$OMO_UPDATE_FILE" ]]; then
+omd_should_check_updates() {
+  if [[ ! -f "$OMD_UPDATE_FILE" ]]; then
     return 0
   fi
 
   local last_check
-  last_check=$(cat "$OMO_UPDATE_FILE" 2>/dev/null || echo 0)
+  last_check=$(cat "$OMD_UPDATE_FILE" 2>/dev/null || echo 0)
   local current_time
-  current_time=$(omo_timestamp)
+  current_time=$(omd_timestamp)
   local time_diff=$((current_time - last_check))
 
-  [[ $time_diff -ge $OMO_UPDATE_CHECK_INTERVAL ]]
+  [[ $time_diff -ge $OMD_UPDATE_CHECK_INTERVAL ]]
 }
 
 # Update the last check timestamp
-omo_update_check_timestamp() {
-  omo_timestamp > "$OMO_UPDATE_FILE"
+omd_update_check_timestamp() {
+  omd_timestamp > "$OMD_UPDATE_FILE"
 }
 
 # Check for updates from git
-omo_check_for_updates() {
+omd_check_for_updates() {
   # Only check if we should (based on interval)
-  if ! omo_should_check_updates; then
+  if ! omd_should_check_updates; then
     return 0
   fi
 
   # Only proceed if git is available
-  if ! omo_command_exists git; then
+  if ! omd_command_exists git; then
     return 1
   fi
 
-  # Change to Oh My Org directory
-  cd "$OMO_DIR" || return 1
+  # Change to Oh My Dev directory
+  cd "$OMD_DIR" || return 1
 
   # Check if this is a git repository
   if ! git rev-parse --git-dir >/dev/null 2>&1; then
@@ -55,43 +55,43 @@ omo_check_for_updates() {
   remote_commit=$(git rev-parse origin/main 2>/dev/null || git rev-parse origin/master 2>/dev/null)
 
   if [[ "$local_commit" != "$remote_commit" ]]; then
-    omo_perform_update
+    omd_perform_update
   fi
 
   # Update timestamp
-  omo_update_check_timestamp
+  omd_update_check_timestamp
 }
 
 # Perform the actual update
-omo_perform_update() {
-  omo_info "Updates available! Updating Oh My Org..."
+omd_perform_update() {
+  omd_info "Updates available! Updating Oh My Dev..."
 
-  cd "$OMO_DIR" || return 1
+  cd "$OMD_DIR" || return 1
 
   # Stash any local changes
-  git stash push -m "oh-my-org auto-update $(date)" >/dev/null 2>&1
+  git stash push -m "oh-my-dev auto-update $(date)" >/dev/null 2>&1
 
   # Pull latest changes
   if git pull --rebase origin main >/dev/null 2>&1 || git pull --rebase origin master >/dev/null 2>&1; then
-    omo_success "Oh My Org updated successfully! Restart your terminal to apply changes."
+    omd_success "Oh My Dev updated successfully! Restart your terminal to apply changes."
   else
-    omo_error "Update failed. Please run 'cd $OMO_DIR && git pull' manually."
+    omd_error "Update failed. Please run 'cd $OMD_DIR && git pull' manually."
   fi
 }
 
 # Manual update command
-omo_update() {
-  omo_info "Checking for updates..."
+omd_update() {
+  omd_info "Checking for updates..."
 
-  cd "$OMO_DIR" || return 1
+  cd "$OMD_DIR" || return 1
 
-  if ! omo_command_exists git; then
-    omo_error "Git is not installed. Cannot update."
+  if ! omd_command_exists git; then
+    omd_error "Git is not installed. Cannot update."
     return 1
   fi
 
   if ! git rev-parse --git-dir >/dev/null 2>&1; then
-    omo_error "Oh My Org directory is not a git repository."
+    omd_error "Oh My Dev directory is not a git repository."
     return 1
   fi
 
@@ -103,8 +103,8 @@ omo_update() {
   remote_commit=$(git rev-parse origin/main 2>/dev/null || git rev-parse origin/master 2>/dev/null)
 
   if [[ "$local_commit" == "$remote_commit" ]]; then
-    omo_success "Oh My Org is already up to date!"
+    omd_success "Oh My Dev is already up to date!"
   else
-    omo_perform_update
+    omd_perform_update
   fi
 }

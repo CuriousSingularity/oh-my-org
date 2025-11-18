@@ -44,8 +44,8 @@ jobs:
         sudo apt-get update -qq
         sudo apt-get install -y -qq zsh
 
-    - name: Test syntax - oh-my-org.sh
-      run: ${{ matrix.shell }} -n oh-my-org.sh
+    - name: Test syntax - oh-my-dev.sh
+      run: ${{ matrix.shell }} -n oh-my-dev.sh
 
     - name: Test syntax - lib scripts
       run: |
@@ -108,8 +108,8 @@ jobs:
       env:
         TERM: xterm-256color
       run: |
-        export OMO_DIR="$HOME/.oh-my-org-test"
-        export OMO_REPO="file://$(pwd)"
+        export OMD_DIR="$HOME/.oh-my-dev-test"
+        export OMD_REPO="file://$(pwd)"
 
         # Create a local git repo for testing
         git config --global init.defaultBranch main
@@ -128,22 +128,22 @@ jobs:
 
     - name: Verify installation
       run: |
-        [ -d "$HOME/.oh-my-org-test" ] || exit 1
-        [ -f "$HOME/.oh-my-org-test/oh-my-org.sh" ] || exit 1
-        [ -d "$HOME/.oh-my-org-test/lib" ] || exit 1
-        [ -d "$HOME/.oh-my-org-test/plugins" ] || exit 1
-        [ -d "$HOME/.oh-my-org-test/themes" ] || exit 1
-        [ -d "$HOME/.oh-my-org-test/custom" ] || exit 1
+        [ -d "$HOME/.oh-my-dev-test" ] || exit 1
+        [ -f "$HOME/.oh-my-dev-test/oh-my-dev.sh" ] || exit 1
+        [ -d "$HOME/.oh-my-dev-test/lib" ] || exit 1
+        [ -d "$HOME/.oh-my-dev-test/plugins" ] || exit 1
+        [ -d "$HOME/.oh-my-dev-test/themes" ] || exit 1
+        [ -d "$HOME/.oh-my-dev-test/custom" ] || exit 1
         echo "✓ All required files and directories exist"
 
-    - name: Test sourcing oh-my-org.sh
+    - name: Test sourcing oh-my-dev.sh
       env:
         TERM: xterm-256color
       run: |
-        export OMO_DIR="$HOME/.oh-my-org-test"
-        export OMO_AUTO_UPDATE=false
-        ${{ matrix.shell }} -c "source $HOME/.oh-my-org-test/oh-my-org.sh"
-        echo "✓ Successfully sourced oh-my-org.sh"
+        export OMD_DIR="$HOME/.oh-my-dev-test"
+        export OMD_AUTO_UPDATE=false
+        ${{ matrix.shell }} -c "source $HOME/.oh-my-dev-test/oh-my-dev.sh"
+        echo "✓ Successfully sourced oh-my-dev.sh"
 
     - name: Test plugin loading
       env:
@@ -151,10 +151,10 @@ jobs:
       run: |
         ${{ matrix.shell }} -c '
         shopt -s expand_aliases 2>/dev/null || true
-        export OMO_DIR="$HOME/.oh-my-org-test"
-        export OMO_AUTO_UPDATE=false
-        export OMO_PLUGINS=(git docker)
-        source "$HOME/.oh-my-org-test/oh-my-org.sh"
+        export OMD_DIR="$HOME/.oh-my-dev-test"
+        export OMD_AUTO_UPDATE=false
+        export OMD_PLUGINS=(git docker)
+        source "$HOME/.oh-my-dev-test/oh-my-dev.sh"
 
         # Check if git plugin aliases are loaded
         type g >/dev/null 2>&1 || exit 1
@@ -172,10 +172,10 @@ jobs:
         TERM: xterm-256color
       run: |
         ${{ matrix.shell }} -c '
-        export OMO_DIR="$HOME/.oh-my-org-test"
-        export OMO_AUTO_UPDATE=false
-        export OMO_THEME="default"
-        source "$HOME/.oh-my-org-test/oh-my-org.sh"
+        export OMD_DIR="$HOME/.oh-my-dev-test"
+        export OMD_AUTO_UPDATE=false
+        export OMD_THEME="default"
+        source "$HOME/.oh-my-dev-test/oh-my-dev.sh"
         echo "✓ Theme loaded successfully"
         '
 
@@ -191,7 +191,7 @@ jobs:
     - name: Verify required files
       run: |
         required_files=(
-          "oh-my-org.sh"
+          "oh-my-dev.sh"
           "README.md"
           "LICENSE"
           "CLAUDE.md"
@@ -235,7 +235,7 @@ jobs:
         fi
 
         # Check for proper shebang
-        for script in oh-my-org.sh lib/*.sh plugins/*/*.sh themes/*.sh tools/*.sh; do
+        for script in oh-my-dev.sh lib/*.sh plugins/*/*.sh themes/*.sh tools/*.sh; do
           if [ -f "$script" ]; then
             first_line=$(head -n1 "$script")
             if [[ ! "$first_line" =~ ^#!/ ]]; then

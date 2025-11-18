@@ -42,12 +42,12 @@ jobs:
       uses: softprops/action-gh-release@v1
       with:
         body: |
-          ## 🎯 Oh My Org ${{ github.ref_name }}
+          ## 🎯 Oh My Dev ${{ github.ref_name }}
 
           ### 📦 Installation
 
           ```bash
-          bash -c "$(curl -fsSL https://raw.githubusercontent.com/curioussingularity/oh-my-org/main/tools/install.sh)"
+          bash -c "$(curl -fsSL https://raw.githubusercontent.com/curioussingularity/oh-my-dev/main/tools/install.sh)"
           ```
 
           ### 📝 Changes
@@ -56,9 +56,9 @@ jobs:
 
           ### 🔗 Links
 
-          - [Documentation](https://github.com/curioussingularity/oh-my-org#readme)
-          - [Installation Guide](https://github.com/curioussingularity/oh-my-org#installation)
-          - [Contributing](https://github.com/curioussingularity/oh-my-org/blob/main/.github/CONTRIBUTING.md)
+          - [Documentation](https://github.com/curioussingularity/oh-my-dev#readme)
+          - [Installation Guide](https://github.com/curioussingularity/oh-my-dev#installation)
+          - [Contributing](https://github.com/curioussingularity/oh-my-dev/blob/main/.github/CONTRIBUTING.md)
         draft: false
         prerelease: false
       env:
@@ -72,14 +72,14 @@ jobs:
     steps:
     - name: Test installation from release
       run: |
-        export OMO_DIR="$HOME/.oh-my-org-release-test"
-        export OMO_REPO="https://github.com/curioussingularity/oh-my-org.git"
+        export OMD_DIR="$HOME/.oh-my-dev-release-test"
+        export OMD_REPO="https://github.com/curioussingularity/oh-my-dev.git"
 
         # Download and run installer
-        curl -fsSL https://raw.githubusercontent.com/curioussingularity/oh-my-org/main/tools/install.sh | bash
+        curl -fsSL https://raw.githubusercontent.com/curioussingularity/oh-my-dev/main/tools/install.sh | bash
 
         # Verify installation
-        [ -d "$OMO_DIR" ] || exit 1
-        [ -f "$OMO_DIR/oh-my-org.sh" ] || exit 1
+        [ -d "$OMD_DIR" ] || exit 1
+        [ -f "$OMD_DIR/oh-my-dev.sh" ] || exit 1
 
         echo "✓ Release installation verified"

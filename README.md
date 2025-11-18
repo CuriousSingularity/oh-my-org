@@ -1,4 +1,4 @@
-# 🎯 Oh My Org
+# 🎯 Oh My Dev
 
 ```
   ██████╗  ██╗  ██╗
@@ -15,19 +15,19 @@
  ██║ ╚═╝ ██║    ██║
  ╚═╝     ╚═╝    ╚═╝
 
-  ██████╗  ██████╗   ██████╗
- ██╔═══██╗ ██╔══██╗ ██╔════╝
- ██║   ██║ ██████╔╝ ██║  ███╗
- ██║   ██║ ██╔══██╗ ██║   ██║
- ╚██████╔╝ ██║  ██║ ╚██████╔╝
-  ╚═════╝  ╚═╝  ╚═╝  ╚═════╝
+ ██████╗  ███████╗ ██╗   ██╗
+ ██╔══██╗ ██╔════╝ ██║   ██║
+ ██║  ██║ █████╗   ██║   ██║
+ ██║  ██║ ██╔══╝   ╚██╗ ██╔╝
+ ██████╔╝ ███████╗  ╚████╔╝
+ ╚═════╝  ╚══════╝   ╚═══╝
 ```
 
-[![CI](https://github.com/curioussingularity/oh-my-org/workflows/CI/badge.svg)](https://github.com/curioussingularity/oh-my-org/actions/workflows/ci.yml)
-[![Release](https://github.com/curioussingularity/oh-my-org/workflows/Release/badge.svg)](https://github.com/curioussingularity/oh-my-org/actions/workflows/release.yml)
+[![CI](https://github.com/curioussingularity/oh-my-dev/workflows/CI/badge.svg)](https://github.com/curioussingularity/oh-my-dev/actions/workflows/ci.yml)
+[![Release](https://github.com/curioussingularity/oh-my-dev/workflows/Release/badge.svg)](https://github.com/curioussingularity/oh-my-dev/actions/workflows/release.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-A delightful terminal organization framework inspired by oh-my-zsh, with automatic git updates, plugin system, and theme support for bash and zsh.
+**A powerful developer productivity framework for your terminal.** Inspired by oh-my-zsh, Oh My Dev supercharges your development workflow with automatic git updates, a rich plugin ecosystem, and customizable themes for bash and zsh. Built by developers, for developers.
 
 ## ✨ Features
 
@@ -43,37 +43,37 @@ A delightful terminal organization framework inspired by oh-my-zsh, with automat
 ### ⚡ Quick Install
 
 ```bash
-bash -c "$(curl -fsSL https://raw.githubusercontent.com/curioussingularity/oh-my-org/main/tools/install.sh)"
+bash -c "$(curl -fsSL https://raw.githubusercontent.com/curioussingularity/oh-my-dev/main/tools/install.sh)"
 ```
 
 Or with wget:
 
 ```bash
-bash -c "$(wget -qO- https://raw.githubusercontent.com/curioussingularity/oh-my-org/main/tools/install.sh)"
+bash -c "$(wget -qO- https://raw.githubusercontent.com/curioussingularity/oh-my-dev/main/tools/install.sh)"
 ```
 
 ### 🔨 Manual Installation
 
 1. Clone the repository:
 ```bash
-git clone https://github.com/curioussingularity/oh-my-org.git ~/.oh-my-org
+git clone https://github.com/curioussingularity/oh-my-dev.git ~/.oh-my-dev
 ```
 
 2. Add to your shell configuration (`~/.zshrc` or `~/.bashrc`):
 ```bash
-# Oh My Org Configuration
-export OMO_DIR="$HOME/.oh-my-org"
-export OMO_AUTO_UPDATE=true
-export OMO_UPDATE_CHECK_INTERVAL=86400  # 24 hours
+# Oh My Dev Configuration
+export OMD_DIR="$HOME/.oh-my-dev"
+export OMD_AUTO_UPDATE=true
+export OMD_UPDATE_CHECK_INTERVAL=86400  # 24 hours
 
 # Optional: Set theme
-# export OMO_THEME="default"
+# export OMD_THEME="default"
 
 # Optional: Enable plugins
-# export OMO_PLUGINS=(git docker)
+# export OMD_PLUGINS=(git docker uv utils)
 
-# Source Oh My Org
-source "$OMO_DIR/oh-my-org.sh"
+# Source Oh My Dev
+source "$OMD_DIR/oh-my-dev.sh"
 ```
 
 3. Restart your terminal or run:
@@ -85,14 +85,14 @@ source ~/.zshrc  # or ~/.bashrc
 
 ### 🔄 Auto-Update Settings
 
-Oh My Org automatically checks for updates every time you open a new terminal session. You can configure this behavior:
+Oh My Dev automatically checks for updates every time you open a new terminal session. You can configure this behavior:
 
 ```bash
 # Disable auto-update
-export OMO_AUTO_UPDATE=false
+export OMD_AUTO_UPDATE=false
 
 # Change update check interval (in seconds)
-export OMO_UPDATE_CHECK_INTERVAL=43200  # 12 hours
+export OMD_UPDATE_CHECK_INTERVAL=43200  # 12 hours
 ```
 
 ### 🔄 Manual Update
@@ -100,15 +100,15 @@ export OMO_UPDATE_CHECK_INTERVAL=43200  # 12 hours
 You can manually trigger an update at any time:
 
 ```bash
-omo_update
+omd_update
 ```
 
 ### 🔌 Plugins
 
-Enable plugins by adding them to the `OMO_PLUGINS` array in your shell configuration:
+Enable plugins by adding them to the `OMD_PLUGINS` array in your shell configuration:
 
 ```bash
-export OMO_PLUGINS=(git docker uv utils)
+export OMD_PLUGINS=(git docker uv utils)
 ```
 
 #### 📚 Available Plugins
@@ -152,9 +152,9 @@ export OMO_PLUGINS=(git docker uv utils)
 
 #### ✍️ Creating Custom Plugins
 
-1. Create a plugin directory in `~/.oh-my-org/custom/plugins/`:
+1. Create a plugin directory in `~/.oh-my-dev/custom/plugins/`:
 ```bash
-mkdir -p ~/.oh-my-org/custom/plugins/myplugin
+mkdir -p ~/.oh-my-dev/custom/plugins/myplugin
 ```
 
 2. Create the plugin file `myplugin.plugin.sh`:
@@ -171,15 +171,15 @@ my_function() {
 
 3. Enable the plugin in your shell configuration:
 ```bash
-export OMO_PLUGINS=(myplugin)
+export OMD_PLUGINS=(myplugin)
 ```
 
 ### 🎨 Themes
 
-Set your theme by exporting the `OMO_THEME` variable:
+Set your theme by exporting the `OMD_THEME` variable:
 
 ```bash
-export OMO_THEME="default"
+export OMD_THEME="default"
 ```
 
 #### 🎭 Available Themes
@@ -188,9 +188,9 @@ export OMO_THEME="default"
 
 #### ✨ Creating Custom Themes
 
-1. Create a theme file in `~/.oh-my-org/custom/themes/`:
+1. Create a theme file in `~/.oh-my-dev/custom/themes/`:
 ```bash
-touch ~/.oh-my-org/custom/themes/mytheme.theme.sh
+touch ~/.oh-my-dev/custom/themes/mytheme.theme.sh
 ```
 
 2. Define your prompt in the theme file:
@@ -207,42 +207,42 @@ fi
 
 3. Enable the theme:
 ```bash
-export OMO_THEME="mytheme"
+export OMD_THEME="mytheme"
 ```
 
 ### 🛠️ Custom Configurations
 
-Add your custom shell configurations in `~/.oh-my-org/custom/custom.sh`. This file is sourced after all plugins and themes, allowing you to override or extend functionality.
+Add your custom shell configurations in `~/.oh-my-dev/custom/custom.sh`. This file is sourced after all plugins and themes, allowing you to override or extend functionality.
 
 ## 💻 Commands
 
-- `omo_update` - Manually check for and install updates
-- `omo_list_plugins` - List all available plugins
-- `omo_list_themes` - List all available themes
+- `omd_update` - Manually check for and install updates
+- `omd_list_plugins` - List all available plugins
+- `omd_list_themes` - List all available themes
 
 ## 🗑️ Uninstallation
 
 Run the uninstall script:
 
 ```bash
-bash ~/.oh-my-org/tools/uninstall.sh
+bash ~/.oh-my-dev/tools/uninstall.sh
 ```
 
-This will remove Oh My Org and clean up your shell configuration.
+This will remove Oh My Dev and clean up your shell configuration.
 
 ## 🔍 How Auto-Update Works
 
-1. Every time you open a new terminal, Oh My Org checks if it's time to check for updates (based on `OMO_UPDATE_CHECK_INTERVAL`)
+1. Every time you open a new terminal, Oh My Dev checks if it's time to check for updates (based on `OMD_UPDATE_CHECK_INTERVAL`)
 2. If it's time, it runs `git fetch` in the background to check for new commits
 3. If updates are available, it automatically pulls the latest changes
 4. The update process runs asynchronously to avoid slowing down terminal startup
-5. A timestamp is stored in `~/.oh-my-org/.last_update_check` to track the last check time
+5. A timestamp is stored in `~/.oh-my-dev/.last_update_check` to track the last check time
 
 ## 📁 Directory Structure
 
 ```
-~/.oh-my-org/
-├── oh-my-org.sh          # Main initialization script
+~/.oh-my-dev/
+├── oh-my-dev.sh          # Main initialization script
 ├── lib/                  # Core library
 │   ├── utils.sh          # Utility functions
 │   ├── auto-update.sh    # Auto-update functionality
@@ -250,7 +250,9 @@ This will remove Oh My Org and clean up your shell configuration.
 │   └── theme-loader.sh   # Theme loading system
 ├── plugins/              # Default plugins
 │   ├── git/
-│   └── docker/
+│   ├── docker/
+│   ├── uv/
+│   └── utils/
 ├── themes/               # Default themes
 │   └── default.theme.sh
 ├── tools/                # Installation and management scripts
@@ -283,4 +285,4 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 
 ## 💬 Support
 
-If you encounter any issues or have questions, please [open an issue](https://github.com/curioussingularity/oh-my-org/issues) on GitHub.
+If you encounter any issues or have questions, please [open an issue](https://github.com/curioussingularity/oh-my-dev/issues) on GitHub.

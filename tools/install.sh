@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Oh My Org installation script
+# Oh My Dev installation script
 
 set -e
 
@@ -11,19 +11,19 @@ BLUE="\033[0;34m"
 RESET="\033[0m"
 
 # Configuration
-OMO_DIR="${OMO_DIR:-$HOME/.oh-my-org}"
-OMO_REPO="${OMO_REPO:-https://github.com/curioussingularity/oh-my-org.git}"
+OMD_DIR="${OMD_DIR:-$HOME/.oh-my-dev}"
+OMD_REPO="${OMD_REPO:-https://github.com/curioussingularity/oh-my-dev.git}"
 
 print_info() {
-  echo -e "${BLUE}[Oh My Org]${RESET} $1"
+  echo -e "${BLUE}[Oh My Dev]${RESET} $1"
 }
 
 print_success() {
-  echo -e "${GREEN}[Oh My Org]${RESET} $1"
+  echo -e "${GREEN}[Oh My Dev]${RESET} $1"
 }
 
 print_error() {
-  echo -e "${RED}[Oh My Org]${RESET} $1"
+  echo -e "${RED}[Oh My Dev]${RESET} $1"
 }
 
 print_welcome() {
@@ -47,18 +47,18 @@ print_welcome() {
  ██║ ╚═╝ ██║    ██║
  ╚═╝     ╚═╝    ╚═╝
 
-  ██████╗  ██████╗   ██████╗
- ██╔═══██╗ ██╔══██╗ ██╔════╝
- ██║   ██║ ██████╔╝ ██║  ███╗
- ██║   ██║ ██╔══██╗ ██║   ██║
- ╚██████╔╝ ██║  ██║ ╚██████╔╝
-  ╚═════╝  ╚═╝  ╚═╝  ╚═════╝
+ ██████╗  ███████╗ ██╗   ██╗
+ ██╔══██╗ ██╔════╝ ██║   ██║
+ ██║  ██║ █████╗   ██║   ██║
+ ██║  ██║ ██╔══╝   ╚██╗ ██╔╝
+ ██████╔╝ ███████╗  ╚████╔╝
+ ╚═════╝  ╚══════╝   ╚═══╝
 EOF
   echo -e "${RESET}"
   echo ""
   echo -e "${GREEN}╔════════════════════════════════════════════════╗${RESET}"
   echo -e "${GREEN}║                                                ║${RESET}"
-  echo -e "${GREEN}║${RESET}  🎯 Terminal Organization Framework          ${GREEN}║${RESET}"
+  echo -e "${GREEN}║${RESET}  🎯 Developer Productivity Framework         ${GREEN}║${RESET}"
   echo -e "${GREEN}║${RESET}  ✨ Auto-update • Plugins • Themes           ${GREEN}║${RESET}"
   echo -e "${GREEN}║${RESET}  🐚 Works with Bash & Zsh                    ${GREEN}║${RESET}"
   echo -e "${GREEN}║                                                ║${RESET}"
@@ -80,19 +80,19 @@ print_completion() {
   echo -e "     ${GREEN}source $SHELL_RC${RESET}"
   echo ""
   echo -e "  ${YELLOW}2.${RESET} Enable plugins (optional):"
-  echo -e "     ${GREEN}export OMO_PLUGINS=(git docker)${RESET}"
+  echo -e "     ${GREEN}export OMD_PLUGINS=(git docker uv utils)${RESET}"
   echo ""
   echo -e "  ${YELLOW}3.${RESET} Set a theme (optional):"
-  echo -e "     ${GREEN}export OMO_THEME=\"default\"${RESET}"
+  echo -e "     ${GREEN}export OMD_THEME=\"default\"${RESET}"
   echo ""
   echo -e "${BLUE}📚 Configuration:${RESET}"
   echo -e "  • Main config: ${YELLOW}$SHELL_RC${RESET}"
-  echo -e "  • Custom config: ${YELLOW}$OMO_DIR/custom/custom.sh${RESET}"
+  echo -e "  • Custom config: ${YELLOW}$OMD_DIR/custom/custom.sh${RESET}"
   echo ""
   echo -e "${BLUE}🔗 Documentation:${RESET}"
-  echo -e "  ${YELLOW}https://github.com/curioussingularity/oh-my-org${RESET}"
+  echo -e "  ${YELLOW}https://github.com/curioussingularity/oh-my-dev${RESET}"
   echo ""
-  echo -e "${GREEN}Happy organizing! 🚀${RESET}"
+  echo -e "${GREEN}Boost your productivity! 🚀${RESET}"
   echo ""
 }
 
@@ -105,38 +105,38 @@ if ! command -v git >/dev/null 2>&1; then
   exit 1
 fi
 
-# Check if Oh My Org is already installed
-if [[ -d "$OMO_DIR" ]]; then
-  print_info "Oh My Org is already installed at $OMO_DIR"
+# Check if Oh My Dev is already installed
+if [[ -d "$OMD_DIR" ]]; then
+  print_info "Oh My Dev is already installed at $OMD_DIR"
   read -p "Do you want to reinstall? (y/N) " -n 1 -r
   echo
   if [[ ! $REPLY =~ ^[Yy]$ ]]; then
     exit 0
   fi
-  rm -rf "$OMO_DIR"
+  rm -rf "$OMD_DIR"
 fi
 
 # Clone the repository
-print_info "Cloning Oh My Org to $OMO_DIR..."
-if git clone "$OMO_REPO" "$OMO_DIR"; then
-  print_success "Oh My Org cloned successfully!"
+print_info "Cloning Oh My Dev to $OMD_DIR..."
+if git clone "$OMD_REPO" "$OMD_DIR"; then
+  print_success "Oh My Dev cloned successfully!"
 else
-  print_error "Failed to clone Oh My Org"
+  print_error "Failed to clone Oh My Dev"
   exit 1
 fi
 
 # Create custom directories
-mkdir -p "$OMO_DIR/custom/plugins"
-mkdir -p "$OMO_DIR/custom/themes"
+mkdir -p "$OMD_DIR/custom/plugins"
+mkdir -p "$OMD_DIR/custom/themes"
 
 # Create custom configuration file
-if [[ ! -f "$OMO_DIR/custom/custom.sh" ]]; then
-  cat > "$OMO_DIR/custom/custom.sh" << 'EOF'
-# Custom configuration for Oh My Org
+if [[ ! -f "$OMD_DIR/custom/custom.sh" ]]; then
+  cat > "$OMD_DIR/custom/custom.sh" << 'EOF'
+# Custom configuration for Oh My Dev
 # Add your custom shell configurations here
 
 # Example: Custom aliases
-# alias myalias="echo 'Hello from Oh My Org'"
+# alias myalias="echo 'Hello from Oh My Dev'"
 
 # Example: Custom functions
 # my_function() {
@@ -152,39 +152,39 @@ if [[ -n "$ZSH_VERSION" ]] || [[ "$SHELL" == *"zsh"* ]]; then
 elif [[ -n "$BASH_VERSION" ]] || [[ "$SHELL" == *"bash"* ]]; then
   SHELL_RC="$HOME/.bashrc"
 else
-  print_error "Unsupported shell. Oh My Org supports bash and zsh."
+  print_error "Unsupported shell. Oh My Dev supports bash and zsh."
   exit 1
 fi
 
-# Add Oh My Org to shell configuration
-print_info "Adding Oh My Org to $SHELL_RC..."
+# Add Oh My Dev to shell configuration
+print_info "Adding Oh My Dev to $SHELL_RC..."
 
-OMO_CONFIG="
-# Oh My Org Configuration
-export OMO_DIR=\"$OMO_DIR\"
+OMD_CONFIG="
+# Oh My Dev Configuration
+export OMD_DIR=\"$OMD_DIR\"
 
 # Enable auto-update (set to false to disable)
-export OMO_AUTO_UPDATE=true
+export OMD_AUTO_UPDATE=true
 
 # Update check interval in seconds (default: 86400 = 24 hours)
-export OMO_UPDATE_CHECK_INTERVAL=86400
+export OMD_UPDATE_CHECK_INTERVAL=86400
 
 # Theme (optional)
-# export OMO_THEME=\"default\"
+# export OMD_THEME=\"default\"
 
 # Plugins to load (optional)
-# export OMO_PLUGINS=(git docker kubectl)
+# export OMD_PLUGINS=(git docker uv utils)
 
-# Source Oh My Org
-source \"\$OMO_DIR/oh-my-org.sh\"
+# Source Oh My Dev
+source \"\$OMD_DIR/oh-my-dev.sh\"
 "
 
 # Check if already configured
-if grep -q "Oh My Org Configuration" "$SHELL_RC" 2>/dev/null; then
-  print_info "Oh My Org is already configured in $SHELL_RC"
+if grep -q "Oh My Dev Configuration" "$SHELL_RC" 2>/dev/null; then
+  print_info "Oh My Dev is already configured in $SHELL_RC"
 else
-  echo "$OMO_CONFIG" >> "$SHELL_RC"
-  print_success "Oh My Org added to $SHELL_RC"
+  echo "$OMD_CONFIG" >> "$SHELL_RC"
+  print_success "Oh My Dev added to $SHELL_RC"
 fi
 
 # Show completion message

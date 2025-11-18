@@ -4,17 +4,18 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-Oh My Org is a terminal organization framework inspired by oh-my-zsh. It provides:
+Oh My Dev is a developer productivity framework for the terminal, inspired by oh-my-zsh. It provides:
 - Automatic git-based updates on terminal startup
-- Plugin system for extending functionality
+- Plugin system for extending functionality (git, docker, uv, utils)
 - Theme system for customizing the terminal prompt
 - Cross-shell support (bash and zsh)
+- Built by developers, for developers
 
 ## Architecture
 
 ### Core Components
 
-1. **oh-my-org.sh** - Main entry point
+1. **oh-my-dev.sh** - Main entry point
    - Sets up environment variables
    - Sources library components
    - Triggers auto-update check (in background)
@@ -27,7 +28,7 @@ Oh My Org is a terminal organization framework inspired by oh-my-zsh. It provide
    - `plugin-loader.sh`: Plugin discovery and loading
    - `theme-loader.sh`: Theme discovery and loading
 
-3. **plugins/** - Default plugins (git, docker)
+3. **plugins/** - Default plugins (git, docker, uv, utils)
    - Each plugin is in its own directory
    - Plugin files named `{name}.plugin.sh`
    - Custom plugins go in `custom/plugins/`
@@ -45,29 +46,29 @@ Oh My Org is a terminal organization framework inspired by oh-my-zsh. It provide
 The auto-update mechanism is a core feature:
 
 1. Runs on every shell initialization (if enabled)
-2. Checks timestamp in `.last_update_check` against `OMO_UPDATE_CHECK_INTERVAL`
+2. Checks timestamp in `.last_update_check` against `OMD_UPDATE_CHECK_INTERVAL`
 3. If interval has passed:
    - Runs `git fetch origin` to check for updates
    - Compares local and remote HEAD commits
    - If different, runs `git pull --rebase` to update
-4. Runs in background (`&!`) to avoid blocking shell startup
-5. Users can disable via `OMO_AUTO_UPDATE=false`
-6. Manual updates available via `omo_update` command
+4. Runs in background (subshell with `&`) to avoid blocking shell startup
+5. Users can disable via `OMD_AUTO_UPDATE=false`
+6. Manual updates available via `omd_update` command
 
 ### Plugin System
 
 Plugins are bash/zsh scripts that extend functionality:
 
-- Loaded via `omo_load_plugins()` in plugin-loader.sh
+- Loaded via `omd_load_plugins()` in plugin-loader.sh
 - Searches custom plugins first, then default plugins
 - Plugin file must be named `{plugin-name}.plugin.sh`
-- Enabled via `OMO_PLUGINS` array in user's shell RC file
+- Enabled via `OMD_PLUGINS` array in user's shell RC file
 
 ### Theme System
 
 Themes customize the terminal prompt:
 
-- Loaded via `omo_load_theme()` in theme-loader.sh
+- Loaded via `omd_load_theme()` in theme-loader.sh
 - Searches custom themes first, then default themes
 - Theme file must be named `{theme-name}.theme.sh`
 - Themes set `PS1` (bash) or `PROMPT` (zsh)
@@ -81,7 +82,7 @@ Since this is a shell framework, testing requires sourcing scripts:
 
 ```bash
 # Test main script
-source ./oh-my-org.sh
+source ./oh-my-dev.sh
 
 # Test specific library
 source ./lib/auto-update.sh
@@ -95,14 +96,14 @@ source ./plugins/git/git.plugin.sh
 1. Create directory: `mkdir -p plugins/{plugin-name}`
 2. Create plugin file: `plugins/{plugin-name}/{plugin-name}.plugin.sh`
 3. Add aliases, functions, or configurations
-4. Test by adding to `OMO_PLUGINS` array
+4. Test by adding to `OMD_PLUGINS` array
 
 ### Creating New Themes
 
 1. Create theme file: `themes/{theme-name}.theme.sh`
 2. Define prompt for both bash and zsh
 3. Use escape sequences for colors
-4. Test with `export OMO_THEME="{theme-name}"`
+4. Test with `export OMD_THEME="{theme-name}"`
 
 ### File Permissions
 
@@ -113,12 +114,13 @@ chmod +x tools/*.sh
 
 ## Key Design Decisions
 
-1. **Background Updates**: Auto-update runs in background (`&!`) to prevent shell startup delay
+1. **Background Updates**: Auto-update runs in background (subshell with `&`) to prevent shell startup delay
 2. **Interval-Based Checking**: Uses timestamp file to avoid checking on every shell start
 3. **Graceful Degradation**: Features fail silently if git is not available
 4. **Custom Directory**: All user customizations in `custom/` to avoid git conflicts
 5. **Shell Detection**: Runtime detection of bash vs zsh for compatibility
 6. **Stash Before Update**: Automatically stashes local changes before git pull
+7. **Developer Productivity Focus**: Built by developers, for developers, with plugins like uv (Python) and utils
 
 ## Common Patterns
 
@@ -126,29 +128,29 @@ chmod +x tools/*.sh
 
 Add to `lib/utils.sh`:
 ```bash
-omo_new_function() {
-  # Use omo_ prefix for all functions
-  # Use omo_info, omo_success, omo_warning, omo_error for logging
+omd_new_function() {
+  # Use omd_ prefix for all functions
+  # Use omd_info, omd_success, omd_warning, omd_error for logging
 }
 ```
 
 ### Color Usage
 
 Use defined color variables from `lib/utils.sh`:
-- `OMO_COLOR_GREEN` - Success messages
-- `OMO_COLOR_YELLOW` - Warnings
-- `OMO_COLOR_RED` - Errors
-- `OMO_COLOR_BLUE` - Info messages
-- `OMO_COLOR_RESET` - Reset to default
+- `OMD_COLOR_GREEN` - Success messages
+- `OMD_COLOR_YELLOW` - Warnings
+- `OMD_COLOR_RED` - Errors
+- `OMD_COLOR_BLUE` - Info messages
+- `OMD_COLOR_RESET` - Reset to default
 
 ### Environment Variables
 
-All Oh My Org environment variables use `OMO_` prefix:
-- `OMO_DIR` - Installation directory
-- `OMO_AUTO_UPDATE` - Enable/disable auto-update
-- `OMO_UPDATE_CHECK_INTERVAL` - Update check interval in seconds
-- `OMO_THEME` - Current theme name
-- `OMO_PLUGINS` - Array of enabled plugins
+All Oh My Dev environment variables use `OMD_` prefix:
+- `OMD_DIR` - Installation directory
+- `OMD_AUTO_UPDATE` - Enable/disable auto-update
+- `OMD_UPDATE_CHECK_INTERVAL` - Update check interval in seconds
+- `OMD_THEME` - Current theme name
+- `OMD_PLUGINS` - Array of enabled plugins
 
 ## Testing Considerations
 
@@ -163,7 +165,7 @@ All Oh My Org environment variables use `OMO_` prefix:
 
 - Use `#!/usr/bin/env bash` shebang
 - Use `set -e` in installation scripts for safety
-- Prefix all functions with `omo_`
+- Prefix all functions with `omd_`
 - Use lowercase with underscores for variables
 - Add comments for non-obvious logic
 - Use double brackets `[[ ]]` for conditionals
