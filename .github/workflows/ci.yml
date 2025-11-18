@@ -1,0 +1,227 @@
+name: CI
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+
+jobs:
+  lint:
+    name: Lint Shell Scripts
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Run ShellCheck
+      uses: ludeeus/action-shellcheck@master
+      with:
+        scandir: '.'
+        ignore_paths: '.git .github'
+        severity: warning
+
+  test-syntax:
+    name: Test Shell Syntax
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        shell: [bash, zsh]
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Install ${{ matrix.shell }}
+      run: |
+        if [ "${{ matrix.shell }}" = "zsh" ]; then
+          sudo apt-get update
+          sudo apt-get install -y zsh
+        fi
+
+    - name: Test syntax - oh-my-org.sh
+      run: ${{ matrix.shell }} -n oh-my-org.sh
+
+    - name: Test syntax - lib scripts
+      run: |
+        for script in lib/*.sh; do
+          echo "Testing $script"
+          bash -n "$script"
+        done
+
+    - name: Test syntax - plugin scripts
+      run: |
+        for script in plugins/*/*.sh; do
+          echo "Testing $script"
+          bash -n "$script"
+        done
+
+    - name: Test syntax - theme scripts
+      run: |
+        for script in themes/*.sh; do
+          echo "Testing $script"
+          bash -n "$script"
+        done
+
+    - name: Test syntax - tool scripts
+      run: |
+        for script in tools/*.sh; do
+          echo "Testing $script"
+          bash -n "$script"
+        done
+
+  test-install:
+    name: Test Installation
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        shell: [bash, zsh]
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Install ${{ matrix.shell }}
+      run: |
+        if [ "${{ matrix.shell }}" = "zsh" ]; then
+          sudo apt-get update
+          sudo apt-get install -y zsh
+        fi
+
+    - name: Set default shell
+      run: |
+        if [ "${{ matrix.shell }}" = "zsh" ]; then
+          echo "SHELL=/usr/bin/zsh" >> $GITHUB_ENV
+        else
+          echo "SHELL=/bin/bash" >> $GITHUB_ENV
+        fi
+
+    - name: Test installation script (dry run)
+      run: |
+        export OMO_DIR="$HOME/.oh-my-org-test"
+        export OMO_REPO="file://$(pwd)"
+
+        # Create a local git repo for testing
+        git config --global init.defaultBranch main
+        git config --global user.email "test@example.com"
+        git config --global user.name "Test User"
+
+        # Initialize current directory as git repo if not already
+        if [ ! -d .git ]; then
+          git init
+          git add .
+          git commit -m "Test commit"
+        fi
+
+        # Run installer (it will clone from current directory)
+        bash tools/install.sh
+
+    - name: Verify installation
+      run: |
+        [ -d "$HOME/.oh-my-org-test" ] || exit 1
+        [ -f "$HOME/.oh-my-org-test/oh-my-org.sh" ] || exit 1
+        [ -d "$HOME/.oh-my-org-test/lib" ] || exit 1
+        [ -d "$HOME/.oh-my-org-test/plugins" ] || exit 1
+        [ -d "$HOME/.oh-my-org-test/themes" ] || exit 1
+        [ -d "$HOME/.oh-my-org-test/custom" ] || exit 1
+        echo "✓ All required files and directories exist"
+
+    - name: Test sourcing oh-my-org.sh
+      run: |
+        export OMO_DIR="$HOME/.oh-my-org-test"
+        export OMO_AUTO_UPDATE=false
+        source "$HOME/.oh-my-org-test/oh-my-org.sh"
+        echo "✓ Successfully sourced oh-my-org.sh"
+
+    - name: Test plugin loading
+      run: |
+        export OMO_DIR="$HOME/.oh-my-org-test"
+        export OMO_AUTO_UPDATE=false
+        export OMO_PLUGINS=(git docker)
+        source "$HOME/.oh-my-org-test/oh-my-org.sh"
+
+        # Check if git plugin aliases are loaded
+        type g >/dev/null 2>&1 || exit 1
+        type ga >/dev/null 2>&1 || exit 1
+
+        # Check if docker plugin aliases are loaded
+        type d >/dev/null 2>&1 || exit 1
+        type dc >/dev/null 2>&1 || exit 1
+
+        echo "✓ Plugins loaded successfully"
+
+    - name: Test theme loading
+      run: |
+        export OMO_DIR="$HOME/.oh-my-org-test"
+        export OMO_AUTO_UPDATE=false
+        export OMO_THEME="default"
+        source "$HOME/.oh-my-org-test/oh-my-org.sh"
+        echo "✓ Theme loaded successfully"
+
+  verify-structure:
+    name: Verify Project Structure
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Verify required files
+      run: |
+        required_files=(
+          "oh-my-org.sh"
+          "README.md"
+          "LICENSE"
+          "CLAUDE.md"
+          "lib/utils.sh"
+          "lib/auto-update.sh"
+          "lib/plugin-loader.sh"
+          "lib/theme-loader.sh"
+          "tools/install.sh"
+          "tools/uninstall.sh"
+          "plugins/git/git.plugin.sh"
+          "plugins/docker/docker.plugin.sh"
+          "themes/default.theme.sh"
+        )
+
+        missing_files=()
+        for file in "${required_files[@]}"; do
+          if [ ! -f "$file" ]; then
+            missing_files+=("$file")
+          fi
+        done
+
+        if [ ${#missing_files[@]} -gt 0 ]; then
+          echo "❌ Missing required files:"
+          printf '%s\n' "${missing_files[@]}"
+          exit 1
+        fi
+
+        echo "✓ All required files present"
+
+    - name: Verify executable permissions
+      run: |
+        [ -x "tools/install.sh" ] || exit 1
+        [ -x "tools/uninstall.sh" ] || exit 1
+        echo "✓ Tool scripts have executable permissions"
+
+    - name: Check for common issues
+      run: |
+        # Check for trailing whitespace
+        if grep -r '[[:space:]]$' --include='*.sh' .; then
+          echo "⚠️  Warning: Trailing whitespace found"
+        fi
+
+        # Check for proper shebang
+        for script in oh-my-org.sh lib/*.sh plugins/*/*.sh themes/*.sh tools/*.sh; do
+          if [ -f "$script" ]; then
+            first_line=$(head -n1 "$script")
+            if [[ ! "$first_line" =~ ^#!/ ]]; then
+              echo "❌ Missing shebang in $script"
+              exit 1
+            fi
+          fi
+        done
+
+        echo "✓ All scripts have proper shebangs"

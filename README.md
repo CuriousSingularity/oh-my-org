@@ -1,5 +1,9 @@
 # 🎯 Oh My Org
 
+[![CI](https://github.com/curioussingularity/oh-my-org/workflows/CI/badge.svg)](https://github.com/curioussingularity/oh-my-org/actions/workflows/ci.yml)
+[![Release](https://github.com/curioussingularity/oh-my-org/workflows/Release/badge.svg)](https://github.com/curioussingularity/oh-my-org/actions/workflows/release.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
 A delightful terminal organization framework inspired by oh-my-zsh, with automatic git updates, plugin system, and theme support for bash and zsh.
 
 ## ✨ Features
