@@ -139,6 +139,7 @@ jobs:
     - name: Test sourcing oh-my-org.sh
       env:
         TERM: xterm-256color
+      shell: ${{ matrix.shell }} {0}
       run: |
         export OMO_DIR="$HOME/.oh-my-org-test"
         export OMO_AUTO_UPDATE=false
@@ -148,7 +149,13 @@ jobs:
     - name: Test plugin loading
       env:
         TERM: xterm-256color
+      shell: ${{ matrix.shell }} {0}
       run: |
+        # Enable alias expansion (needed for non-interactive shells)
+        if [ -n "$BASH_VERSION" ]; then
+          shopt -s expand_aliases
+        fi
+
         export OMO_DIR="$HOME/.oh-my-org-test"
         export OMO_AUTO_UPDATE=false
         export OMO_PLUGINS=(git docker)
@@ -167,6 +174,7 @@ jobs:
     - name: Test theme loading
       env:
         TERM: xterm-256color
+      shell: ${{ matrix.shell }} {0}
       run: |
         export OMO_DIR="$HOME/.oh-my-org-test"
         export OMO_AUTO_UPDATE=false
