@@ -80,7 +80,7 @@ print_completion() {
   echo -e "     ${GREEN}source $SHELL_RC${RESET}"
   echo ""
   echo -e "  ${YELLOW}2.${RESET} Enable plugins (optional):"
-  echo -e "     ${GREEN}export OMD_PLUGINS=(git docker uv utils claude-code gemini)${RESET}"
+  echo -e "     ${GREEN}export OMD_PLUGINS=(git docker uv utils claude-code gemini devtools)${RESET}"
   echo ""
   echo -e "  ${YELLOW}3.${RESET} Set a theme (optional):"
   echo -e "     ${GREEN}export OMD_THEME=\"default\"${RESET}"

@@ -70,7 +70,7 @@ export OMD_UPDATE_CHECK_INTERVAL=86400  # 24 hours
 # export OMD_THEME="default"
 
 # Optional: Enable plugins
-# export OMD_PLUGINS=(git docker uv utils claude-code gemini)
+# export OMD_PLUGINS=(git docker uv utils claude-code gemini devtools)
 
 # Source Oh My Dev
 source "$OMD_DIR/oh-my-dev.sh"
@@ -108,7 +108,7 @@ omd_update
 Enable plugins by adding them to the `OMD_PLUGINS` array in your shell configuration:
 
 ```bash
-export OMD_PLUGINS=(git docker uv utils claude-code gemini)
+export OMD_PLUGINS=(git docker uv utils claude-code gemini devtools)
 ```
 
 #### 📚 Available Plugins
@@ -164,6 +164,20 @@ export OMD_PLUGINS=(git docker uv utils claude-code gemini)
   - `gemini_status` - Show installation and configuration status
   - Aliases: `gemini-install`, `gemini-config-api`, `gemini-config-vertex`, `gemini-status`
   - References: [Gemini CLI](https://github.com/google-gemini/gemini-cli) | [Get API Key](https://aistudio.google.com/apikey)
+
+- **🔧 devtools**: Developer tools installation and management
+  - **Categories:**
+    - `devtools_install_essentials` - Core dev tools (git, vim, tmux, curl, wget, tree, unzip)
+    - `devtools_install_system` - System monitoring (htop, nvtop, neofetch, sensors, cpufrequtils)
+    - `devtools_install_shell` - Shell enhancements (zsh, powerline, fonts)
+    - `devtools_install_modern` - Modern CLI tools (lsd, fd-find)
+    - `devtools_install_network` - Network utilities (speedtest-cli, net-tools)
+  - **Management:**
+    - `devtools_install_all` - Install all tools at once
+    - `devtools_update` - Update all installed tools
+    - `devtools_configure` - Post-install configuration (kernel modules)
+    - `devtools_status` - Show installation status
+  - **Aliases:** `dev-install-all`, `dev-status`, `dev-update`, `dev-configure`
 
 #### ✍️ Creating Custom Plugins
 
@@ -269,7 +283,8 @@ This will remove Oh My Dev and clean up your shell configuration.
 │   ├── uv/
 │   ├── utils/
 │   ├── claude-code/
-│   └── gemini/
+│   ├── gemini/
+│   └── devtools/
 ├── themes/               # Default themes
 │   └── default.theme.sh
 ├── tools/                # Installation and management scripts
