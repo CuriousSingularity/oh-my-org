@@ -27,6 +27,7 @@
 #    $ devtools_install_ohmyzsh        # Oh My Zsh with powerlevel10k
 #    $ devtools_install_fzf            # Fuzzy finder
 #    $ devtools_configure_vim          # Vim configuration
+#    $ devtools_configure_p10k         # Powerlevel10k theme configuration
 #    $ devtools_setup_shell            # Complete shell setup (all user tools)
 #
 # 5. Update all installed tools:
@@ -344,6 +345,12 @@ devtools_configure_vim() {
   echo -e "${DEVTOOLS_BLUE}Configuring Vim...${DEVTOOLS_RESET}"
 
   local vimrc="$HOME/.vimrc"
+  local vimrc_template="${OMD_DIR:-$HOME/.oh-my-dev}/configs/vimrc"
+
+  if [[ ! -f "$vimrc_template" ]]; then
+    echo -e "${DEVTOOLS_RED}✗ Vim configuration template not found at $vimrc_template${DEVTOOLS_RESET}" >&2
+    return 1
+  fi
 
   if [[ -f "$vimrc" ]]; then
     echo -e "${DEVTOOLS_YELLOW}~/.vimrc already exists${DEVTOOLS_RESET}"
@@ -355,76 +362,51 @@ devtools_configure_vim() {
     fi
   fi
 
-  cat > "$vimrc" << 'EOF'
-" Basic Settings
-syntax on
-set number
-set relativenumber
-set tabstop=4
-set shiftwidth=4
-set expandtab
-set autoindent
-set smartindent
-set hlsearch
-set incsearch
-set ignorecase
-set smartcase
-set showmatch
-set ruler
-set showcmd
-set wildmenu
-set wildmode=longest:full,full
-set backspace=indent,eol,start
-set encoding=utf-8
-set fileencoding=utf-8
-set laststatus=2
-set mouse=a
-set clipboard=unnamedplus
-set cursorline
-set scrolloff=8
-set signcolumn=yes
-set updatetime=50
-set timeoutlen=300
+  if cp "$vimrc_template" "$vimrc"; then
+    mkdir -p "$HOME/.vim/undodir"
+    echo -e "${DEVTOOLS_GREEN}✓ Vim configured successfully${DEVTOOLS_RESET}"
+    echo -e "  Configuration saved to: ${DEVTOOLS_BLUE}$vimrc${DEVTOOLS_RESET}"
+  else
+    echo -e "${DEVTOOLS_RED}✗ Failed to configure Vim${DEVTOOLS_RESET}" >&2
+    return 1
+  fi
+}
 
-" Color scheme
-set background=dark
-colorscheme desert
+# Configure Powerlevel10k theme
+# Copies p10k configuration file to user's home directory
+devtools_configure_p10k() {
+  echo -e "${DEVTOOLS_BLUE}Configuring Powerlevel10k theme...${DEVTOOLS_RESET}"
 
-" Disable swap files
-set noswapfile
-set nobackup
-set undodir=~/.vim/undodir
-set undofile
+  local p10k_config="$HOME/.p10k.zsh"
+  local p10k_template="${OMD_DIR:-$HOME/.oh-my-dev}/configs/p10k.zsh"
 
-" Search settings
-set path+=**
-nnoremap <silent> <Space> :nohlsearch<CR>
+  if [[ ! -f "$p10k_template" ]]; then
+    echo -e "${DEVTOOLS_RED}✗ Powerlevel10k configuration template not found at $p10k_template${DEVTOOLS_RESET}" >&2
+    return 1
+  fi
 
-" Navigation
-nnoremap <C-j> <C-W>j
-nnoremap <C-k> <C-W>k
-nnoremap <C-h> <C-W>h
-nnoremap <C-l> <C-W>l
+  if [[ -f "$p10k_config" ]]; then
+    echo -e "${DEVTOOLS_YELLOW}~/.p10k.zsh already exists${DEVTOOLS_RESET}"
+    read -p "Overwrite existing .p10k.zsh? (y/N) " -n 1 -r
+    echo
+    if [[ ! $REPLY =~ ^[Yy]$ ]]; then
+      echo "Skipping p10k configuration"
+      return 0
+    fi
+  fi
 
-" Leader key
-let mapleader = " "
-
-" Save with Ctrl+s
-nnoremap <C-s> :w<CR>
-inoremap <C-s> <Esc>:w<CR>a
-
-" Quit with leader+q
-nnoremap <leader>q :q<CR>
-nnoremap <leader>Q :q!<CR>
-
-" File explorer
-nnoremap <leader>e :Explore<CR>
-EOF
-
-  mkdir -p "$HOME/.vim/undodir"
-
-  echo -e "${DEVTOOLS_GREEN}✓ Vim configured successfully${DEVTOOLS_RESET}"
-  echo -e "  Configuration saved to: ${DEVTOOLS_BLUE}$vimrc${DEVTOOLS_RESET}"
+  if cp "$p10k_template" "$p10k_config"; then
+    echo -e "${DEVTOOLS_GREEN}✓ Powerlevel10k configured successfully${DEVTOOLS_RESET}"
+    echo -e "  Configuration saved to: ${DEVTOOLS_BLUE}$p10k_config${DEVTOOLS_RESET}"
+    echo ""
+    echo -e "${DEVTOOLS_YELLOW}Note: To customize your p10k theme:${DEVTOOLS_RESET}"
+    echo -e "  1. Run: ${DEVTOOLS_BLUE}p10k configure${DEVTOOLS_RESET}"
+    echo -e "  2. Or edit: ${DEVTOOLS_BLUE}~/.p10k.zsh${DEVTOOLS_RESET}"
+    echo -e "  3. To preserve custom config: ${DEVTOOLS_BLUE}cp ~/.p10k.zsh ${OMD_DIR:-$HOME/.oh-my-dev}/configs/p10k.zsh${DEVTOOLS_RESET}"
+  else
+    echo -e "${DEVTOOLS_RED}✗ Failed to configure Powerlevel10k${DEVTOOLS_RESET}" >&2
+    return 1
+  fi
 }
 
 # Complete shell setup - install all user-space tools
@@ -444,6 +426,8 @@ devtools_setup_shell() {
   devtools_install_fzf
   echo ""
   devtools_configure_vim
+  echo ""
+  devtools_configure_p10k
 
   echo ""
   echo -e "${DEVTOOLS_BLUE}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${DEVTOOLS_RESET}"
@@ -453,7 +437,7 @@ devtools_setup_shell() {
   echo -e "${DEVTOOLS_YELLOW}Final steps:${DEVTOOLS_RESET}"
   echo -e "  1. Set zsh as default shell: ${DEVTOOLS_BLUE}chsh -s \$(which zsh)${DEVTOOLS_RESET}"
   echo -e "  2. Restart your terminal"
-  echo -e "  3. Run p10k configuration: ${DEVTOOLS_BLUE}p10k configure${DEVTOOLS_RESET}"
+  echo -e "  3. Your p10k theme is configured and ready to use!"
   echo ""
 }
 
@@ -662,6 +646,7 @@ alias dev-install-fonts='devtools_install_fonts'
 alias dev-install-ohmyzsh='devtools_install_ohmyzsh'
 alias dev-install-fzf='devtools_install_fzf'
 alias dev-configure-vim='devtools_configure_vim'
+alias dev-configure-p10k='devtools_configure_p10k'
 alias dev-setup-shell='devtools_setup_shell'
 
 # Useful aliases - Management

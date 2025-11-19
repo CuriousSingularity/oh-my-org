@@ -179,6 +179,7 @@ export OMD_PLUGINS=(git docker uv utils claude-code gemini devtools)
     - `devtools_install_ohmyzsh` - Oh My Zsh with powerlevel10k theme and plugins
     - `devtools_install_fzf` - Fuzzy finder for command line
     - `devtools_configure_vim` - Vim configuration with sensible defaults
+    - `devtools_configure_p10k` - Powerlevel10k theme configuration
     - `devtools_setup_shell` - Complete shell setup (all user tools)
   - **Management:**
     - `devtools_update` - Update all installed tools

@@ -1,0 +1,63 @@
+" Basic Settings
+syntax on
+set number
+set relativenumber
+set tabstop=4
+set shiftwidth=4
+set expandtab
+set autoindent
+set smartindent
+set hlsearch
+set incsearch
+set ignorecase
+set smartcase
+set showmatch
+set ruler
+set showcmd
+set wildmenu
+set wildmode=longest:full,full
+set backspace=indent,eol,start
+set encoding=utf-8
+set fileencoding=utf-8
+set laststatus=2
+set mouse=a
+set clipboard=unnamedplus
+set cursorline
+set scrolloff=8
+set signcolumn=yes
+set updatetime=50
+set timeoutlen=300
+
+" Color scheme
+set background=dark
+colorscheme desert
+
+" Disable swap files
+set noswapfile
+set nobackup
+set undodir=~/.vim/undodir
+set undofile
+
+" Search settings
+set path+=**
+nnoremap <silent> <Space> :nohlsearch<CR>
+
+" Navigation
+nnoremap <C-j> <C-W>j
+nnoremap <C-k> <C-W>k
+nnoremap <C-h> <C-W>h
+nnoremap <C-l> <C-W>l
+
+" Leader key
+let mapleader = " "
+
+" Save with Ctrl+s
+nnoremap <C-s> :w<CR>
+inoremap <C-s> <Esc>:w<CR>a
+
+" Quit with leader+q
+nnoremap <leader>q :q<CR>
+nnoremap <leader>Q :q!<CR>
+
+" File explorer
+nnoremap <leader>e :Explore<CR>
