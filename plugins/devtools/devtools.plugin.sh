@@ -191,10 +191,12 @@ devtools_install_zsh_userspace() {
 
   # Check if system zsh already exists
   if _devtools_command_exists zsh; then
-    local system_zsh=$(command -v zsh)
-    local zsh_version=$(zsh --version 2>/dev/null | awk '{print $2}')
+    local system_zsh
+    local zsh_version
+    system_zsh=$(command -v zsh)
+    zsh_version=$(zsh --version 2>/dev/null | awk '{print $2}')
     echo -e "${DEVTOOLS_YELLOW}System zsh already installed: $system_zsh (version $zsh_version)${DEVTOOLS_RESET}"
-    read -p "Install user-level zsh anyway? (y/N) " -n 1 -r
+    read -r -p "Install user-level zsh anyway? (y/N) " -n 1
     echo
     if [[ ! $REPLY =~ ^[Yy]$ ]]; then
       echo "Skipping user-level zsh installation"
@@ -205,7 +207,7 @@ devtools_install_zsh_userspace() {
   # Check if already installed
   if [[ -d "$install_dir" ]] && [[ -x "$install_dir/bin/zsh" ]]; then
     echo -e "${DEVTOOLS_YELLOW}User-level zsh already installed at $install_dir${DEVTOOLS_RESET}"
-    read -p "Reinstall? (y/N) " -n 1 -r
+    read -r -p "Reinstall? (y/N) " -n 1
     echo
     if [[ ! $REPLY =~ ^[Yy]$ ]]; then
       echo "Skipping reinstallation"
@@ -502,7 +504,7 @@ devtools_configure_vim() {
 
   if [[ -f "$vimrc" ]]; then
     echo -e "${DEVTOOLS_YELLOW}~/.vimrc already exists${DEVTOOLS_RESET}"
-    read -p "Overwrite existing .vimrc? (y/N) " -n 1 -r
+    read -r -p "Overwrite existing .vimrc? (y/N) " -n 1
     echo
     if [[ ! $REPLY =~ ^[Yy]$ ]]; then
       echo "Skipping vim configuration"
@@ -535,7 +537,7 @@ devtools_configure_p10k() {
 
   if [[ -f "$p10k_config" ]]; then
     echo -e "${DEVTOOLS_YELLOW}~/.p10k.zsh already exists${DEVTOOLS_RESET}"
-    read -p "Overwrite existing .p10k.zsh? (y/N) " -n 1 -r
+    read -r -p "Overwrite existing .p10k.zsh? (y/N) " -n 1
     echo
     if [[ ! $REPLY =~ ^[Yy]$ ]]; then
       echo "Skipping p10k configuration"
@@ -723,7 +725,8 @@ devtools_status() {
 
   # Check for user-level zsh installation
   if [[ -x "$HOME/.local/zsh/bin/zsh" ]]; then
-    local zsh_version=$("$HOME/.local/zsh/bin/zsh" --version 2>/dev/null | awk '{print $2}')
+    local zsh_version
+    zsh_version=$("$HOME/.local/zsh/bin/zsh" --version 2>/dev/null | awk '{print $2}')
     echo -e "  ${DEVTOOLS_GREEN}✓${DEVTOOLS_RESET} User-level zsh (version $zsh_version)"
   else
     echo -e "  ${DEVTOOLS_RED}✗${DEVTOOLS_RESET} User-level zsh"

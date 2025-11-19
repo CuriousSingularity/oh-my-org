@@ -108,7 +108,7 @@ fi
 # Check if Oh My Dev is already installed
 if [[ -d "$OMD_DIR" ]]; then
   print_info "Oh My Dev is already installed at $OMD_DIR"
-  read -p "Do you want to reinstall? (y/N) " -n 1 -r
+  read -r -p "Do you want to reinstall? (y/N) " -n 1
   echo
   if [[ ! $REPLY =~ ^[Yy]$ ]]; then
     exit 0
