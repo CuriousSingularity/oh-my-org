@@ -174,6 +174,7 @@ export OMD_PLUGINS=(git docker uv utils claude-code gemini devtools)
     - `devtools_install_network` - Network utilities (speedtest-cli, net-tools)
     - `devtools_install_all` - Install all system tools at once
   - **User-space Tools (no sudo required):**
+    - `devtools_install_zsh_userspace` - Install zsh from source without sudo
     - `devtools_install_uv` - UV Python package manager
     - `devtools_install_fonts` - Nerd Fonts (Meslo) for terminal
     - `devtools_install_ohmyzsh` - Oh My Zsh with powerlevel10k theme and plugins

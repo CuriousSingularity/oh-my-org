@@ -22,6 +22,7 @@
 #    $ devtools_install_network        # Network utilities (speedtest, net-tools)
 #
 # 4. Install user-space tools (no sudo required):
+#    $ devtools_install_zsh_userspace  # Install zsh from source (no sudo)
 #    $ devtools_install_uv             # UV Python package manager
 #    $ devtools_install_fonts          # Nerd Fonts (Meslo)
 #    $ devtools_install_ohmyzsh        # Oh My Zsh with powerlevel10k
@@ -122,6 +123,16 @@ devtools_install_system() {
 devtools_install_shell() {
   echo -e "${DEVTOOLS_BLUE}Installing shell enhancement tools...${DEVTOOLS_RESET}"
 
+  # Check if sudo is available
+  if ! _devtools_command_exists sudo; then
+    echo -e "${DEVTOOLS_YELLOW}⚠ sudo not available${DEVTOOLS_RESET}"
+    echo ""
+    echo -e "${DEVTOOLS_YELLOW}Consider user-level zsh installation instead:${DEVTOOLS_RESET}"
+    echo -e "  ${DEVTOOLS_BLUE}devtools_install_zsh_userspace${DEVTOOLS_RESET}"
+    echo ""
+    return 1
+  fi
+
   sudo apt update
   sudo apt install -y \
     zsh \
@@ -169,6 +180,143 @@ devtools_install_network() {
 # ============================================================================
 # User-space Installation Functions (no sudo required)
 # ============================================================================
+
+# Install zsh from source (user-level, no sudo required)
+# Useful when system doesn't have zsh or you need a newer version without sudo
+devtools_install_zsh_userspace() {
+  echo -e "${DEVTOOLS_BLUE}Installing zsh from source (user-level)...${DEVTOOLS_RESET}"
+
+  local install_dir="$HOME/.local/zsh"
+  local temp_dir="/tmp/zsh_build_$$"
+
+  # Check if system zsh already exists
+  if _devtools_command_exists zsh; then
+    local system_zsh=$(command -v zsh)
+    local zsh_version=$(zsh --version 2>/dev/null | awk '{print $2}')
+    echo -e "${DEVTOOLS_YELLOW}System zsh already installed: $system_zsh (version $zsh_version)${DEVTOOLS_RESET}"
+    read -p "Install user-level zsh anyway? (y/N) " -n 1 -r
+    echo
+    if [[ ! $REPLY =~ ^[Yy]$ ]]; then
+      echo "Skipping user-level zsh installation"
+      return 0
+    fi
+  fi
+
+  # Check if already installed
+  if [[ -d "$install_dir" ]] && [[ -x "$install_dir/bin/zsh" ]]; then
+    echo -e "${DEVTOOLS_YELLOW}User-level zsh already installed at $install_dir${DEVTOOLS_RESET}"
+    read -p "Reinstall? (y/N) " -n 1 -r
+    echo
+    if [[ ! $REPLY =~ ^[Yy]$ ]]; then
+      echo "Skipping reinstallation"
+      return 0
+    fi
+    rm -rf "$install_dir"
+  fi
+
+  mkdir -p "$install_dir"
+  mkdir -p "$temp_dir"
+  cd "$temp_dir" || return 1
+
+  # Install ncurses
+  echo -e "${DEVTOOLS_BLUE}Installing ncurses...${DEVTOOLS_RESET}"
+  export CXXFLAGS=" -fPIC" CFLAGS=" -fPIC"
+  export CPPFLAGS="-I${install_dir}/include"
+  export LDFLAGS="-L${install_dir}/lib"
+
+  if ! wget -q --show-progress https://ftp.gnu.org/pub/gnu/ncurses/ncurses-6.2.tar.gz; then
+    echo -e "${DEVTOOLS_RED}✗ Failed to download ncurses${DEVTOOLS_RESET}" >&2
+    cd - >/dev/null || true
+    rm -rf "$temp_dir"
+    return 1
+  fi
+
+  tar -xzf ncurses-6.2.tar.gz
+  cd ncurses-6.2 || return 1
+
+  if ! ./configure --prefix="$install_dir" --enable-shared >/dev/null 2>&1; then
+    echo -e "${DEVTOOLS_RED}✗ Failed to configure ncurses${DEVTOOLS_RESET}" >&2
+    cd - >/dev/null || true
+    rm -rf "$temp_dir"
+    return 1
+  fi
+
+  if ! (make -j$(nproc 2>/dev/null || echo 2) >/dev/null 2>&1 && make install >/dev/null 2>&1); then
+    echo -e "${DEVTOOLS_RED}✗ Failed to build ncurses${DEVTOOLS_RESET}" >&2
+    cd - >/dev/null || true
+    rm -rf "$temp_dir"
+    return 1
+  fi
+
+  echo -e "${DEVTOOLS_GREEN}✓ ncurses installed${DEVTOOLS_RESET}"
+  cd "$temp_dir" || return 1
+
+  # Install zsh
+  echo -e "${DEVTOOLS_BLUE}Installing zsh...${DEVTOOLS_RESET}"
+  if ! wget -q --show-progress -O zsh.tar.xz https://sourceforge.net/projects/zsh/files/latest/download; then
+    echo -e "${DEVTOOLS_RED}✗ Failed to download zsh${DEVTOOLS_RESET}" >&2
+    cd - >/dev/null || true
+    rm -rf "$temp_dir"
+    return 1
+  fi
+
+  mkdir zsh
+  unxz zsh.tar.xz
+  tar -xf zsh.tar -C zsh --strip-components 1
+  cd zsh || return 1
+
+  if ! ./configure --prefix="$install_dir" >/dev/null 2>&1; then
+    echo -e "${DEVTOOLS_RED}✗ Failed to configure zsh${DEVTOOLS_RESET}" >&2
+    cd - >/dev/null || true
+    rm -rf "$temp_dir"
+    return 1
+  fi
+
+  if ! (make -j$(nproc 2>/dev/null || echo 2) >/dev/null 2>&1 && make install >/dev/null 2>&1); then
+    echo -e "${DEVTOOLS_RED}✗ Failed to build zsh${DEVTOOLS_RESET}" >&2
+    cd - >/dev/null || true
+    rm -rf "$temp_dir"
+    return 1
+  fi
+
+  echo -e "${DEVTOOLS_GREEN}✓ zsh installed${DEVTOOLS_RESET}"
+
+  # Cleanup
+  cd - >/dev/null || true
+  rm -rf "$temp_dir"
+
+  # Update shell configuration
+  local shell_rc=""
+  if [[ -f "$HOME/.zshrc" ]]; then
+    shell_rc="$HOME/.zshrc"
+  else
+    shell_rc="$HOME/.bashrc"
+  fi
+
+  # Check if PATH already configured
+  if ! grep -q "$install_dir/bin" "$shell_rc" 2>/dev/null; then
+    echo "" >> "$shell_rc"
+    echo "# User-level zsh installation" >> "$shell_rc"
+    echo "export PATH=$install_dir/bin:\$PATH" >> "$shell_rc"
+    echo -e "${DEVTOOLS_GREEN}✓ Updated $shell_rc${DEVTOOLS_RESET}"
+  fi
+
+  # Add to /etc/shells if writable (for chsh)
+  if [[ -w /etc/shells ]]; then
+    if ! grep -q "$install_dir/bin/zsh" /etc/shells 2>/dev/null; then
+      echo "$install_dir/bin/zsh" | sudo tee -a /etc/shells >/dev/null
+      echo -e "${DEVTOOLS_GREEN}✓ Added to /etc/shells${DEVTOOLS_RESET}"
+    fi
+  fi
+
+  echo ""
+  echo -e "${DEVTOOLS_GREEN}✓ User-level zsh installation complete${DEVTOOLS_RESET}"
+  echo ""
+  echo -e "${DEVTOOLS_YELLOW}To use your new zsh:${DEVTOOLS_RESET}"
+  echo -e "  1. Restart your terminal or run: ${DEVTOOLS_BLUE}source $shell_rc${DEVTOOLS_RESET}"
+  echo -e "  2. Verify installation: ${DEVTOOLS_BLUE}$install_dir/bin/zsh --version${DEVTOOLS_RESET}"
+  echo -e "  3. Set as default shell: ${DEVTOOLS_BLUE}chsh -s $install_dir/bin/zsh${DEVTOOLS_RESET}"
+}
 
 # Install UV Python package manager
 # UV: An extremely fast Python package installer and resolver
@@ -572,6 +720,15 @@ devtools_status() {
 
   # User-space Tools
   echo -e "${DEVTOOLS_YELLOW}User-space Tools:${DEVTOOLS_RESET}"
+
+  # Check for user-level zsh installation
+  if [[ -x "$HOME/.local/zsh/bin/zsh" ]]; then
+    local zsh_version=$("$HOME/.local/zsh/bin/zsh" --version 2>/dev/null | awk '{print $2}')
+    echo -e "  ${DEVTOOLS_GREEN}✓${DEVTOOLS_RESET} User-level zsh (version $zsh_version)"
+  else
+    echo -e "  ${DEVTOOLS_RED}✗${DEVTOOLS_RESET} User-level zsh"
+  fi
+
   _devtools_print_status "uv"
   _devtools_print_status "fzf"
 
@@ -641,6 +798,7 @@ alias dev-install-network='devtools_install_network'
 alias dev-install-all='devtools_install_all'
 
 # Useful aliases - User-space installation
+alias dev-install-zsh='devtools_install_zsh_userspace'
 alias dev-install-uv='devtools_install_uv'
 alias dev-install-fonts='devtools_install_fonts'
 alias dev-install-ohmyzsh='devtools_install_ohmyzsh'
