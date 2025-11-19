@@ -166,18 +166,25 @@ export OMD_PLUGINS=(git docker uv utils claude-code gemini devtools)
   - References: [Gemini CLI](https://github.com/google-gemini/gemini-cli) | [Get API Key](https://aistudio.google.com/apikey)
 
 - **🔧 devtools**: Developer tools installation and management
-  - **Categories:**
+  - **System Tools (require sudo):**
     - `devtools_install_essentials` - Core dev tools (git, vim, tmux, curl, wget, tree, unzip)
     - `devtools_install_system` - System monitoring (htop, nvtop, neofetch, sensors, cpufrequtils)
     - `devtools_install_shell` - Shell enhancements (zsh, powerline, fonts)
     - `devtools_install_modern` - Modern CLI tools (lsd, fd-find)
     - `devtools_install_network` - Network utilities (speedtest-cli, net-tools)
+    - `devtools_install_all` - Install all system tools at once
+  - **User-space Tools (no sudo required):**
+    - `devtools_install_uv` - UV Python package manager
+    - `devtools_install_fonts` - Nerd Fonts (Meslo) for terminal
+    - `devtools_install_ohmyzsh` - Oh My Zsh with powerlevel10k theme and plugins
+    - `devtools_install_fzf` - Fuzzy finder for command line
+    - `devtools_configure_vim` - Vim configuration with sensible defaults
+    - `devtools_setup_shell` - Complete shell setup (all user tools)
   - **Management:**
-    - `devtools_install_all` - Install all tools at once
     - `devtools_update` - Update all installed tools
-    - `devtools_configure` - Post-install configuration (kernel modules)
-    - `devtools_status` - Show installation status
-  - **Aliases:** `dev-install-all`, `dev-status`, `dev-update`, `dev-configure`
+    - `devtools_configure` - Post-install configuration (kernel modules, sensors)
+    - `devtools_status` - Show installation status of all tools
+  - **Aliases:** `dev-install-all`, `dev-setup-shell`, `dev-status`, `dev-update`, `dev-configure`
 
 #### ✍️ Creating Custom Plugins
 

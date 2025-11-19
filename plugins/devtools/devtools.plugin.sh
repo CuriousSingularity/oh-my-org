@@ -21,15 +21,23 @@
 #    $ devtools_install_modern         # Modern CLI tools (lsd, fd-find)
 #    $ devtools_install_network        # Network utilities (speedtest, net-tools)
 #
-# 4. Update all installed tools:
+# 4. Install user-space tools (no sudo required):
+#    $ devtools_install_uv             # UV Python package manager
+#    $ devtools_install_fonts          # Nerd Fonts (Meslo)
+#    $ devtools_install_ohmyzsh        # Oh My Zsh with powerlevel10k
+#    $ devtools_install_fzf            # Fuzzy finder
+#    $ devtools_configure_vim          # Vim configuration
+#    $ devtools_setup_shell            # Complete shell setup (all user tools)
+#
+# 5. Update all installed tools:
 #    $ devtools_update
 #    or
 #    $ dev-update
 #
-# 5. Run post-install configuration:
+# 6. Run post-install configuration:
 #    $ devtools_configure
 #
-# 6. Quick setup workflow:
+# 7. Quick setup workflow:
 #    $ devtools_install_all     # Install everything
 #    $ devtools_configure       # Configure kernel modules, etc.
 #    $ devtools_status          # Verify installation
@@ -157,6 +165,302 @@ devtools_install_network() {
   echo -e "${DEVTOOLS_GREEN}✓ Network tools installed${DEVTOOLS_RESET}"
 }
 
+# ============================================================================
+# User-space Installation Functions (no sudo required)
+# ============================================================================
+
+# Install UV Python package manager
+# UV: An extremely fast Python package installer and resolver
+devtools_install_uv() {
+  echo -e "${DEVTOOLS_BLUE}Installing UV Python package manager...${DEVTOOLS_RESET}"
+
+  if _devtools_command_exists uv; then
+    echo -e "${DEVTOOLS_YELLOW}UV is already installed${DEVTOOLS_RESET}"
+    return 0
+  fi
+
+  if curl -LsSf https://astral.sh/uv/install.sh | sh; then
+    echo -e "${DEVTOOLS_GREEN}✓ UV installed successfully${DEVTOOLS_RESET}"
+    echo ""
+    echo -e "${DEVTOOLS_YELLOW}Note: You may need to restart your terminal or run:${DEVTOOLS_RESET}"
+    echo -e "  ${DEVTOOLS_BLUE}source \$HOME/.cargo/env${DEVTOOLS_RESET}"
+  else
+    echo -e "${DEVTOOLS_RED}✗ Failed to install UV${DEVTOOLS_RESET}" >&2
+    return 1
+  fi
+}
+
+# Install Nerd Fonts (Meslo)
+# Nerd Fonts: Iconic font aggregator, collection, and patcher
+devtools_install_fonts() {
+  echo -e "${DEVTOOLS_BLUE}Installing Nerd Fonts (Meslo)...${DEVTOOLS_RESET}"
+
+  local fonts_dir="$HOME/.local/share/fonts"
+  local font_installed=false
+
+  # Check if fonts already exist
+  if [[ -d "$fonts_dir" ]] && ls "$fonts_dir"/MesloLGS* >/dev/null 2>&1; then
+    echo -e "${DEVTOOLS_YELLOW}Meslo Nerd Fonts already installed${DEVTOOLS_RESET}"
+    return 0
+  fi
+
+  mkdir -p "$fonts_dir"
+  cd "$fonts_dir" || return 1
+
+  echo "Downloading Meslo Nerd Fonts..."
+  local base_url="https://github.com/romkatv/powerlevel10k-media/raw/master"
+  local fonts=(
+    "MesloLGS NF Regular.ttf"
+    "MesloLGS NF Bold.ttf"
+    "MesloLGS NF Italic.ttf"
+    "MesloLGS NF Bold Italic.ttf"
+  )
+
+  for font in "${fonts[@]}"; do
+    if curl -fLo "$font" "$base_url/$font"; then
+      font_installed=true
+    else
+      echo -e "${DEVTOOLS_RED}✗ Failed to download $font${DEVTOOLS_RESET}" >&2
+    fi
+  done
+
+  if [[ "$font_installed" == "true" ]]; then
+    fc-cache -f -v >/dev/null 2>&1
+    echo -e "${DEVTOOLS_GREEN}✓ Meslo Nerd Fonts installed${DEVTOOLS_RESET}"
+    echo ""
+    echo -e "${DEVTOOLS_YELLOW}Note: Set your terminal font to 'MesloLGS NF'${DEVTOOLS_RESET}"
+  else
+    echo -e "${DEVTOOLS_RED}✗ Failed to install fonts${DEVTOOLS_RESET}" >&2
+    return 1
+  fi
+
+  cd - >/dev/null || return 0
+}
+
+# Install Oh My Zsh with powerlevel10k theme and plugins
+# Oh My Zsh: Delightful framework for managing your Zsh configuration
+devtools_install_ohmyzsh() {
+  echo -e "${DEVTOOLS_BLUE}Installing Oh My Zsh with powerlevel10k...${DEVTOOLS_RESET}"
+
+  # Check if zsh is installed
+  if ! _devtools_command_exists zsh; then
+    echo -e "${DEVTOOLS_RED}✗ zsh is not installed${DEVTOOLS_RESET}" >&2
+    echo -e "  Run: ${DEVTOOLS_BLUE}devtools_install_shell${DEVTOOLS_RESET}" >&2
+    return 1
+  fi
+
+  # Install Oh My Zsh
+  if [[ -d "$HOME/.oh-my-zsh" ]]; then
+    echo -e "${DEVTOOLS_YELLOW}Oh My Zsh already installed${DEVTOOLS_RESET}"
+  else
+    echo "Installing Oh My Zsh..."
+    RUNZSH=no CHSH=no sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" || {
+      echo -e "${DEVTOOLS_RED}✗ Failed to install Oh My Zsh${DEVTOOLS_RESET}" >&2
+      return 1
+    }
+    echo -e "${DEVTOOLS_GREEN}✓ Oh My Zsh installed${DEVTOOLS_RESET}"
+  fi
+
+  # Install powerlevel10k theme
+  local p10k_dir="${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k"
+  if [[ -d "$p10k_dir" ]]; then
+    echo -e "${DEVTOOLS_YELLOW}powerlevel10k already installed${DEVTOOLS_RESET}"
+  else
+    echo "Installing powerlevel10k theme..."
+    git clone --depth=1 https://github.com/romkatv/powerlevel10k.git "$p10k_dir" || {
+      echo -e "${DEVTOOLS_RED}✗ Failed to install powerlevel10k${DEVTOOLS_RESET}" >&2
+      return 1
+    }
+    echo -e "${DEVTOOLS_GREEN}✓ powerlevel10k installed${DEVTOOLS_RESET}"
+  fi
+
+  # Install zsh-syntax-highlighting
+  local syntax_dir="${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting"
+  if [[ -d "$syntax_dir" ]]; then
+    echo -e "${DEVTOOLS_YELLOW}zsh-syntax-highlighting already installed${DEVTOOLS_RESET}"
+  else
+    echo "Installing zsh-syntax-highlighting..."
+    git clone https://github.com/zsh-users/zsh-syntax-highlighting.git "$syntax_dir" || {
+      echo -e "${DEVTOOLS_RED}✗ Failed to install zsh-syntax-highlighting${DEVTOOLS_RESET}" >&2
+      return 1
+    }
+    echo -e "${DEVTOOLS_GREEN}✓ zsh-syntax-highlighting installed${DEVTOOLS_RESET}"
+  fi
+
+  # Install zsh-autosuggestions
+  local autosugg_dir="${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins/zsh-autosuggestions"
+  if [[ -d "$autosugg_dir" ]]; then
+    echo -e "${DEVTOOLS_YELLOW}zsh-autosuggestions already installed${DEVTOOLS_RESET}"
+  else
+    echo "Installing zsh-autosuggestions..."
+    git clone https://github.com/zsh-users/zsh-autosuggestions.git "$autosugg_dir" || {
+      echo -e "${DEVTOOLS_RED}✗ Failed to install zsh-autosuggestions${DEVTOOLS_RESET}" >&2
+      return 1
+    }
+    echo -e "${DEVTOOLS_GREEN}✓ zsh-autosuggestions installed${DEVTOOLS_RESET}"
+  fi
+
+  echo ""
+  echo -e "${DEVTOOLS_GREEN}✓ Oh My Zsh setup complete${DEVTOOLS_RESET}"
+  echo ""
+  echo -e "${DEVTOOLS_YELLOW}Next steps:${DEVTOOLS_RESET}"
+  echo -e "  1. Update ~/.zshrc to use powerlevel10k theme:"
+  echo -e "     ${DEVTOOLS_BLUE}ZSH_THEME=\"powerlevel10k/powerlevel10k\"${DEVTOOLS_RESET}"
+  echo -e "  2. Enable plugins in ~/.zshrc:"
+  echo -e "     ${DEVTOOLS_BLUE}plugins=(git zsh-syntax-highlighting zsh-autosuggestions)${DEVTOOLS_RESET}"
+  echo -e "  3. Restart your terminal and run: ${DEVTOOLS_BLUE}p10k configure${DEVTOOLS_RESET}"
+}
+
+# Install fzf fuzzy finder
+# fzf: Command-line fuzzy finder
+devtools_install_fzf() {
+  echo -e "${DEVTOOLS_BLUE}Installing fzf fuzzy finder...${DEVTOOLS_RESET}"
+
+  if [[ -d "$HOME/.fzf" ]]; then
+    echo -e "${DEVTOOLS_YELLOW}fzf already installed${DEVTOOLS_RESET}"
+    return 0
+  fi
+
+  echo "Cloning fzf repository..."
+  git clone --depth 1 https://github.com/junegunn/fzf.git "$HOME/.fzf" || {
+    echo -e "${DEVTOOLS_RED}✗ Failed to clone fzf${DEVTOOLS_RESET}" >&2
+    return 1
+  }
+
+  echo "Installing fzf..."
+  "$HOME/.fzf/install" --all || {
+    echo -e "${DEVTOOLS_RED}✗ Failed to install fzf${DEVTOOLS_RESET}" >&2
+    return 1
+  }
+
+  echo -e "${DEVTOOLS_GREEN}✓ fzf installed successfully${DEVTOOLS_RESET}"
+  echo ""
+  echo -e "${DEVTOOLS_YELLOW}Note: Restart your terminal to use fzf${DEVTOOLS_RESET}"
+}
+
+# Configure Vim with sensible defaults
+# Sets up a basic .vimrc with useful settings
+devtools_configure_vim() {
+  echo -e "${DEVTOOLS_BLUE}Configuring Vim...${DEVTOOLS_RESET}"
+
+  local vimrc="$HOME/.vimrc"
+
+  if [[ -f "$vimrc" ]]; then
+    echo -e "${DEVTOOLS_YELLOW}~/.vimrc already exists${DEVTOOLS_RESET}"
+    read -p "Overwrite existing .vimrc? (y/N) " -n 1 -r
+    echo
+    if [[ ! $REPLY =~ ^[Yy]$ ]]; then
+      echo "Skipping vim configuration"
+      return 0
+    fi
+  fi
+
+  cat > "$vimrc" << 'EOF'
+" Basic Settings
+syntax on
+set number
+set relativenumber
+set tabstop=4
+set shiftwidth=4
+set expandtab
+set autoindent
+set smartindent
+set hlsearch
+set incsearch
+set ignorecase
+set smartcase
+set showmatch
+set ruler
+set showcmd
+set wildmenu
+set wildmode=longest:full,full
+set backspace=indent,eol,start
+set encoding=utf-8
+set fileencoding=utf-8
+set laststatus=2
+set mouse=a
+set clipboard=unnamedplus
+set cursorline
+set scrolloff=8
+set signcolumn=yes
+set updatetime=50
+set timeoutlen=300
+
+" Color scheme
+set background=dark
+colorscheme desert
+
+" Disable swap files
+set noswapfile
+set nobackup
+set undodir=~/.vim/undodir
+set undofile
+
+" Search settings
+set path+=**
+nnoremap <silent> <Space> :nohlsearch<CR>
+
+" Navigation
+nnoremap <C-j> <C-W>j
+nnoremap <C-k> <C-W>k
+nnoremap <C-h> <C-W>h
+nnoremap <C-l> <C-W>l
+
+" Leader key
+let mapleader = " "
+
+" Save with Ctrl+s
+nnoremap <C-s> :w<CR>
+inoremap <C-s> <Esc>:w<CR>a
+
+" Quit with leader+q
+nnoremap <leader>q :q<CR>
+nnoremap <leader>Q :q!<CR>
+
+" File explorer
+nnoremap <leader>e :Explore<CR>
+EOF
+
+  mkdir -p "$HOME/.vim/undodir"
+
+  echo -e "${DEVTOOLS_GREEN}✓ Vim configured successfully${DEVTOOLS_RESET}"
+  echo -e "  Configuration saved to: ${DEVTOOLS_BLUE}$vimrc${DEVTOOLS_RESET}"
+}
+
+# Complete shell setup - install all user-space tools
+# This runs all user-space installation functions in sequence
+devtools_setup_shell() {
+  echo -e "${DEVTOOLS_BLUE}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${DEVTOOLS_RESET}"
+  echo -e "${DEVTOOLS_BLUE}  Complete Shell Setup${DEVTOOLS_RESET}"
+  echo -e "${DEVTOOLS_BLUE}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${DEVTOOLS_RESET}"
+  echo ""
+
+  devtools_install_uv
+  echo ""
+  devtools_install_fonts
+  echo ""
+  devtools_install_ohmyzsh
+  echo ""
+  devtools_install_fzf
+  echo ""
+  devtools_configure_vim
+
+  echo ""
+  echo -e "${DEVTOOLS_BLUE}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${DEVTOOLS_RESET}"
+  echo -e "${DEVTOOLS_GREEN}✓ Shell setup complete${DEVTOOLS_RESET}"
+  echo -e "${DEVTOOLS_BLUE}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${DEVTOOLS_RESET}"
+  echo ""
+  echo -e "${DEVTOOLS_YELLOW}Final steps:${DEVTOOLS_RESET}"
+  echo -e "  1. Set zsh as default shell: ${DEVTOOLS_BLUE}chsh -s \$(which zsh)${DEVTOOLS_RESET}"
+  echo -e "  2. Restart your terminal"
+  echo -e "  3. Run p10k configuration: ${DEVTOOLS_BLUE}p10k configure${DEVTOOLS_RESET}"
+  echo ""
+}
+
+# ============================================================================
+# System-wide Installation (requires sudo)
+# ============================================================================
+
 # Install all developer tools
 devtools_install_all() {
   echo -e "${DEVTOOLS_BLUE}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${DEVTOOLS_RESET}"
@@ -282,6 +586,40 @@ devtools_status() {
   _devtools_print_status "ifconfig"
   echo ""
 
+  # User-space Tools
+  echo -e "${DEVTOOLS_YELLOW}User-space Tools:${DEVTOOLS_RESET}"
+  _devtools_print_status "uv"
+  _devtools_print_status "fzf"
+
+  # Check for Meslo Nerd Fonts
+  if [[ -d "$HOME/.local/share/fonts" ]] && ls "$HOME/.local/share/fonts"/MesloLGS* >/dev/null 2>&1; then
+    echo -e "  ${DEVTOOLS_GREEN}✓${DEVTOOLS_RESET} Meslo Nerd Fonts"
+  else
+    echo -e "  ${DEVTOOLS_RED}✗${DEVTOOLS_RESET} Meslo Nerd Fonts"
+  fi
+
+  # Check for Oh My Zsh
+  if [[ -d "$HOME/.oh-my-zsh" ]]; then
+    echo -e "  ${DEVTOOLS_GREEN}✓${DEVTOOLS_RESET} Oh My Zsh"
+  else
+    echo -e "  ${DEVTOOLS_RED}✗${DEVTOOLS_RESET} Oh My Zsh"
+  fi
+
+  # Check for powerlevel10k
+  if [[ -d "${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k" ]]; then
+    echo -e "  ${DEVTOOLS_GREEN}✓${DEVTOOLS_RESET} powerlevel10k"
+  else
+    echo -e "  ${DEVTOOLS_RED}✗${DEVTOOLS_RESET} powerlevel10k"
+  fi
+
+  # Check for Vim configuration
+  if [[ -f "$HOME/.vimrc" ]]; then
+    echo -e "  ${DEVTOOLS_GREEN}✓${DEVTOOLS_RESET} Vim configured"
+  else
+    echo -e "  ${DEVTOOLS_RED}✗${DEVTOOLS_RESET} Vim configured"
+  fi
+  echo ""
+
   # Configuration Status
   echo -e "${DEVTOOLS_YELLOW}Configuration Status:${DEVTOOLS_RESET}"
 
@@ -303,19 +641,30 @@ devtools_status() {
   echo -e "${DEVTOOLS_BLUE}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${DEVTOOLS_RESET}"
   echo ""
   echo -e "${DEVTOOLS_YELLOW}Quick actions:${DEVTOOLS_RESET}"
-  echo -e "  Install missing tools: ${DEVTOOLS_BLUE}devtools_install_all${DEVTOOLS_RESET}"
+  echo -e "  Install system tools:  ${DEVTOOLS_BLUE}devtools_install_all${DEVTOOLS_RESET}"
+  echo -e "  Setup user shell:      ${DEVTOOLS_BLUE}devtools_setup_shell${DEVTOOLS_RESET}"
   echo -e "  Run configuration:     ${DEVTOOLS_BLUE}devtools_configure${DEVTOOLS_RESET}"
   echo -e "  Update all tools:      ${DEVTOOLS_BLUE}devtools_update${DEVTOOLS_RESET}"
   echo ""
 }
 
-# Useful aliases
+# Useful aliases - System installation
 alias dev-install-essentials='devtools_install_essentials'
 alias dev-install-system='devtools_install_system'
 alias dev-install-shell='devtools_install_shell'
 alias dev-install-modern='devtools_install_modern'
 alias dev-install-network='devtools_install_network'
 alias dev-install-all='devtools_install_all'
+
+# Useful aliases - User-space installation
+alias dev-install-uv='devtools_install_uv'
+alias dev-install-fonts='devtools_install_fonts'
+alias dev-install-ohmyzsh='devtools_install_ohmyzsh'
+alias dev-install-fzf='devtools_install_fzf'
+alias dev-configure-vim='devtools_configure_vim'
+alias dev-setup-shell='devtools_setup_shell'
+
+# Useful aliases - Management
 alias dev-update='devtools_update'
 alias dev-configure='devtools_configure'
 alias dev-status='devtools_status'
