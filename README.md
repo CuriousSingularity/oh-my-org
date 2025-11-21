@@ -29,6 +29,30 @@
 
 **A powerful developer productivity framework for your terminal.** Inspired by oh-my-zsh, Oh My Dev supercharges your development workflow with automatic git updates, a rich plugin ecosystem, and customizable themes for bash and zsh. Built by developers, for developers.
 
+## 📚 Table of Contents
+
+- [Why Oh My Dev?](#-why-oh-my-dev)
+- [Features](#-features)
+- [Quick Start](#-quick-start)
+- [Installation](#-installation)
+- [Configuration](#%EF%B8%8F-configuration)
+  - [Plugins](#-plugins)
+  - [Themes](#-themes)
+- [Usage Examples](#-usage-examples)
+- [Commands](#-commands)
+- [Directory Structure](#-directory-structure)
+- [Contributing](#-contributing)
+- [License](#-license)
+
+## 🎯 Why Oh My Dev?
+
+- **⚡ Instant Productivity**: 10+ pre-built plugins for git, docker, python, weather, and more
+- **🚀 Zero-Config Setup**: One-line installation, works immediately
+- **🔧 Developer-First**: Install dev tools, configure shells, manage environments
+- **🤖 AI-Ready**: Built-in support for Claude Code and Google Gemini CLI
+- **🌍 Works Everywhere**: Bash, Zsh, with or without sudo access
+- **📦 Batteries Included**: Complete shell setup with Oh My Zsh + Powerlevel10k
+
 ## ✨ Features
 
 - **🔄 Auto-Update**: Automatically checks for and pulls the latest updates from git every time you open your terminal
@@ -37,6 +61,24 @@
 - **🐚 Cross-Shell**: Works with both bash and zsh
 - **⚡ Lightweight**: Minimal overhead on shell startup
 - **🔧 Extensible**: Easy to create custom plugins and themes
+
+## 🚀 Quick Start
+
+```bash
+# 1. Install Oh My Dev
+bash -c "$(curl -fsSL https://raw.githubusercontent.com/curioussingularity/oh-my-dev/main/tools/install.sh)"
+
+# 2. Add plugins to your ~/.zshrc or ~/.bashrc
+export OMD_PLUGINS=(git docker shortcuts weather)
+
+# 3. Reload your shell
+source ~/.zshrc  # or ~/.bashrc
+
+# 4. Start using it!
+weather london        # Get weather for London
+gits                  # Git status
+dps                   # Docker ps -a
+```
 
 ## 📦 Installation
 
@@ -70,7 +112,7 @@ export OMD_UPDATE_CHECK_INTERVAL=86400  # 24 hours
 # export OMD_THEME="default"
 
 # Optional: Enable plugins
-# export OMD_PLUGINS=(git docker uv utils claude-code gemini devtools)
+# export OMD_PLUGINS=(git docker uv utils claude-code gemini devtools weather shortcuts)
 
 # Source Oh My Dev
 source "$OMD_DIR/oh-my-dev.sh"
@@ -111,7 +153,28 @@ Enable plugins by adding them to the `OMD_PLUGINS` array in your shell configura
 export OMD_PLUGINS=(git docker uv utils claude-code gemini devtools weather shortcuts)
 ```
 
-#### 📚 Available Plugins
+#### 📚 Plugin Overview
+
+Oh My Dev includes **10 powerful plugins** organized by category:
+
+**🔧 Development Tools:**
+- `git` - Git aliases and shortcuts
+- `docker` - Docker and Docker Compose commands
+- `uv` - Python virtual environment management
+
+**🤖 AI & CLI Tools:**
+- `claude-code` - Claude CLI setup and configuration
+- `gemini` - Google Gemini CLI setup
+
+**🛠️ System & Utilities:**
+- `devtools` - Developer tools installer (apt, zsh, fonts, p10k)
+- `utils` - Shell utilities (navigation, math, file operations)
+- `shortcuts` - Convenient aliases for common commands
+
+**🌐 Information & Productivity:**
+- `weather` - Weather forecasts via wttr.in
+
+#### 📖 Plugin Details
 
 - **📂 git**: Git aliases and functions
   - Aliases: `g`, `ga`, `gc`, `gco`, `gst`, `glog`, etc.
@@ -316,7 +379,12 @@ This will remove Oh My Dev and clean up your shell configuration.
 │   ├── utils/
 │   ├── claude-code/
 │   ├── gemini/
-│   └── devtools/
+│   ├── devtools/
+│   ├── weather/
+│   └── shortcuts/
+├── configs/              # Configuration templates
+│   ├── vimrc
+│   └── p10k.zsh
 ├── themes/               # Default themes
 │   └── default.theme.sh
 ├── tools/                # Installation and management scripts
@@ -326,6 +394,82 @@ This will remove Oh My Dev and clean up your shell configuration.
     ├── custom.sh
     ├── plugins/
     └── themes/
+```
+
+## 📋 Usage Examples
+
+### Development Workflow
+
+```bash
+# Git shortcuts
+gita                    # Stage all changes
+gitc "feat: add login"  # Commit with message
+gitp                    # Pull latest changes
+gitpu                   # Push to remote
+gits                    # Check status
+
+# Docker workflow
+dps                     # List all containers
+dstop                   # Stop all running containers
+drun ubuntu bash        # Run Ubuntu interactively
+
+# Python development with UV
+uvc 3.11                # Create venv with Python 3.11
+uvu                     # Install dependencies
+uvk                     # Setup Jupyter kernel
+```
+
+### Daily Productivity
+
+```bash
+# Weather check
+weather                 # Default city
+weather london          # Specific city
+weather-temp paris      # Just temperature
+w                       # Quick shortcut
+
+# File operations
+mkcd project            # Create and enter directory
+backup config.json      # Backup with timestamp
+extract archive.tar.gz  # Universal extractor
+
+# System utilities
+up 3                    # Go up 3 directories
+percentage 100 150      # Calculate % change
+sysinfo                 # System information
+```
+
+### Developer Tools Setup
+
+```bash
+# Check what's installed
+dev-status
+
+# Install development essentials (with sudo)
+dev-install-essentials  # git, vim, tmux, curl, etc.
+dev-install-system      # htop, nvtop, neofetch
+
+# User-space setup (no sudo needed)
+dev-install-zsh         # Install zsh from source
+dev-install-fonts       # Nerd Fonts
+dev-install-ohmyzsh     # Oh My Zsh + powerlevel10k
+dev-configure-vim       # Vim configuration
+dev-configure-p10k      # p10k theme config
+dev-setup-shell         # Complete shell setup
+```
+
+### AI Tools Configuration
+
+```bash
+# Claude Code
+claude-install
+claude-config /path/to/creds.json my-project-id
+claude-status
+
+# Google Gemini
+gemini-install
+gemini-config-api "your-api-key"
+gemini-status
 ```
 
 ## 🤝 Contributing
