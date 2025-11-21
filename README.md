@@ -108,7 +108,7 @@ omd_update
 Enable plugins by adding them to the `OMD_PLUGINS` array in your shell configuration:
 
 ```bash
-export OMD_PLUGINS=(git docker uv utils claude-code gemini devtools)
+export OMD_PLUGINS=(git docker uv utils claude-code gemini devtools weather)
 ```
 
 #### 📚 Available Plugins
@@ -187,6 +187,18 @@ export OMD_PLUGINS=(git docker uv utils claude-code gemini devtools)
     - `devtools_configure` - Post-install configuration (kernel modules, sensors)
     - `devtools_status` - Show installation status of all tools
   - **Aliases:** `dev-install-all`, `dev-setup-shell`, `dev-status`, `dev-update`, `dev-configure`
+
+- **🌤️ weather**: Weather information using wttr.in
+  - `weather [city] [level] [parameters]` - Get weather for a city (default: bangalore)
+  - `weather-full <city>` - Full weather report with forecast
+  - `weather-short <city>` - One-line weather summary
+  - `weather-temp <city>` - Temperature only
+  - `weather-now <city>` - Current condition and temperature
+  - `weather-lang <city> <lang>` - Weather in different language (es, fr, de, etc.)
+  - `weather-help` - Show detailed usage and examples
+  - Aliases: `w` (quick weather)
+  - Detail levels: 0 (one-line), 1 (compact), 2 (full), 3 (full + extra info)
+  - Powered by [wttr.in](https://github.com/chubin/wttr.in)
 
 #### ✍️ Creating Custom Plugins
 
