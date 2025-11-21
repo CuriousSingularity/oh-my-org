@@ -80,7 +80,7 @@ print_completion() {
   echo -e "     ${GREEN}source $SHELL_RC${RESET}"
   echo ""
   echo -e "  ${YELLOW}2.${RESET} Enable plugins (optional):"
-  echo -e "     ${GREEN}export OMD_PLUGINS=(git docker uv utils claude-code gemini devtools weather)${RESET}"
+  echo -e "     ${GREEN}export OMD_PLUGINS=(git docker uv utils claude-code gemini devtools weather shortcuts)${RESET}"
   echo ""
   echo -e "  ${YELLOW}3.${RESET} Set a theme (optional):"
   echo -e "     ${GREEN}export OMD_THEME=\"default\"${RESET}"
@@ -173,7 +173,7 @@ export OMD_UPDATE_CHECK_INTERVAL=86400
 # export OMD_THEME=\"default\"
 
 # Plugins to load (optional)
-# export OMD_PLUGINS=(git docker uv utils weather)
+# export OMD_PLUGINS=(git docker uv utils weather shortcuts)
 
 # Source Oh My Dev
 source \"\$OMD_DIR/oh-my-dev.sh\"

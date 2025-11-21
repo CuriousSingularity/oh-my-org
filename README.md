@@ -108,7 +108,7 @@ omd_update
 Enable plugins by adding them to the `OMD_PLUGINS` array in your shell configuration:
 
 ```bash
-export OMD_PLUGINS=(git docker uv utils claude-code gemini devtools weather)
+export OMD_PLUGINS=(git docker uv utils claude-code gemini devtools weather shortcuts)
 ```
 
 #### 📚 Available Plugins
@@ -199,6 +199,17 @@ export OMD_PLUGINS=(git docker uv utils claude-code gemini devtools weather)
   - Aliases: `w` (quick weather)
   - Detail levels: 0 (one-line), 1 (compact), 2 (full), 3 (full + extra info)
   - Powered by [wttr.in](https://github.com/chubin/wttr.in)
+
+- **⚡ shortcuts**: Convenient aliases for common commands
+  - **Shell:** `reload` (reload shell)
+  - **Files:** `lsa`, `ll`, `lla` (enhanced ls), `rmf` (force remove)
+  - **Git:** `gita`, `gitb`, `gitc`, `gitco`, `gitd`, `gitl`, `gitp`, `gitpu`, `gits`, `gitr`
+  - **Search:** `fd`, `fzf`, `grp` (grep with color)
+  - **Docker:** `dps`, `dstop`, `drun`, `drmall`, `dcp`
+  - **System:** `sysinfo`, `duh`, `dfh`, `psg`
+  - **Network:** `ports`, `ping5`
+  - **Functions:** `mkcd`, `backup`, `extract`
+  - **History:** `hg` (history grep), `hc` (clear history)
 
 #### ✍️ Creating Custom Plugins
 
