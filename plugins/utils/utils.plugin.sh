@@ -155,7 +155,8 @@ swap() {
         return 1
     fi
 
-    local temp_name="${file1}_temp_swap_$(date +%s%N)" # Add timestamp for uniqueness
+    local temp_name
+    temp_name="${file1}_temp_swap_$(date +%s%N)" # Add timestamp for uniqueness
     if mv "$file1" "$temp_name" && \
        mv "$file2" "$file1" && \
        mv "$temp_name" "$file2"; then

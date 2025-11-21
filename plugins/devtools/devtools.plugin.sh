@@ -243,7 +243,7 @@ devtools_install_zsh_userspace() {
     return 1
   fi
 
-  if ! (make -j$(nproc 2>/dev/null || echo 2) >/dev/null 2>&1 && make install >/dev/null 2>&1); then
+  if ! (make -j"$(nproc 2>/dev/null || echo 2)" >/dev/null 2>&1 && make install >/dev/null 2>&1); then
     echo -e "${DEVTOOLS_RED}✗ Failed to build ncurses${DEVTOOLS_RESET}" >&2
     cd - >/dev/null || true
     rm -rf "$temp_dir"
@@ -274,7 +274,7 @@ devtools_install_zsh_userspace() {
     return 1
   fi
 
-  if ! (make -j$(nproc 2>/dev/null || echo 2) >/dev/null 2>&1 && make install >/dev/null 2>&1); then
+  if ! (make -j"$(nproc 2>/dev/null || echo 2)" >/dev/null 2>&1 && make install >/dev/null 2>&1); then
     echo -e "${DEVTOOLS_RED}✗ Failed to build zsh${DEVTOOLS_RESET}" >&2
     cd - >/dev/null || true
     rm -rf "$temp_dir"

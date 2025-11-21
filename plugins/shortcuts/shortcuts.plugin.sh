@@ -119,7 +119,7 @@ alias ping5="ping -c 5"
 
 # Make directory and cd into it
 mkcd() {
-  mkdir -p "$1" && cd "$1"
+  mkdir -p "$1" && cd "$1" || return
 }
 
 # Quick backup of a file

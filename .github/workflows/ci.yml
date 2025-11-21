@@ -20,7 +20,7 @@ jobs:
       uses: ludeeus/action-shellcheck@master
       with:
         scandir: '.'
-        ignore_paths: '.git .github'
+        ignore_paths: '.git .github configs'
         severity: warning
 
   test-syntax:
